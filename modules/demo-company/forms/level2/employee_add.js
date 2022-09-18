@@ -83,7 +83,7 @@ export default class EmployeeAdd extends PlForm {
                     <template d:repeat="{{contacts}}">
                         <pl-flex-layout align="flex-end">
                             <pl-combobox data="[[contact_types]]" label="Тип" value="{{item.contact_type}}" required></pl-combobox>
-                            <pl-input label="Контакт" value="{{item.contact}}" required pattern="[[_getPattern(item.contact_type)]]">
+                            <pl-input label="Контакт" disabled="[[!item.contact_type]]" value="{{item.contact}}" required pattern="[[_getPattern(item.contact_type)]]">
                                 <pl-input-mask  mask="[[_getMask(item.contact_type)]]" unmasked-value="{{item.unmaskedValue}}"></pl-input-mask>
                             </pl-input>
                             <pl-icon-button variant="ghost" iconset="pl-default" size="16" icon="trashcan"
