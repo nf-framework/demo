@@ -1,0 +1,32 @@
+[
+    {
+        "caption":  "Guides",
+        "path":     "",
+        "icon":     "person-group",
+        "order":    1
+    },
+    {
+        "caption":  "Beginner level",
+        "path":     "Guides",
+        "icon":     "person-group",
+        "form":     "level1.employee_list",
+        "guid":     "b6fa3da0-ac28-4fda-ba3d-bd64260160d7",
+        "order":    1
+    },
+    {
+        "caption":  "Normal level",
+        "path":     "Guides",
+        "icon":     "person-group",
+        "form":     "level2.employee_list",
+        "guid":     "1ea79ebb-5f4a-49c3-b759-3e0ae89d665d",
+        "order":    2
+    },
+    {
+        "caption":  "Hard level",
+        "path":     "Guides",
+        "icon":     "person-group",
+        "form":     "level3.employee_list",
+        "guid":     "15192985-af13-4fc2-9d86-5322d2b9168b",
+        "order":    3
+    }
+]

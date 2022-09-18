@@ -1,0 +1,1 @@
+CREATE CONSTRAINT TRIGGER tr4employee_card8deferred_checks_after AFTER INSERT OR UPDATE ON company.employee_card DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE PROCEDURE company.f4employee_card8tr_deferred_checks();

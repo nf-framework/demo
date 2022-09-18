@@ -1,0 +1,174 @@
+[
+{
+	"nfc.modulelist": {
+		"code": "company",
+		"caption": "Организация",
+		"#details": [
+			{
+				"nfc.unitlist": {
+					"code": "company.employee",
+					"caption": "Сотрудники",
+					"pcode": null,
+					"mdl": "company",
+					"opt": {
+						"divideType": null,
+						"idGenMethod": "self",
+						"useCatalogs": null,
+						"useChronicle": false,
+						"useHierarchy": false
+					},
+					"#details": [
+						{
+							"nfc.unitbps": {
+								"code": "company.employee.add",
+								"caption": "Добавление",
+								"exec_function": null,
+								"use_privs": true
+							}
+						},
+						{
+							"nfc.unitbps": {
+								"code": "company.employee.del",
+								"caption": "Удаление",
+								"exec_function": null,
+								"use_privs": true
+							}
+						},
+						{
+							"nfc.unitbps": {
+								"code": "company.employee.upd",
+								"caption": "Исправление",
+								"exec_function": null,
+								"use_privs": true
+							}
+						}
+					]
+				}
+			},
+			{
+				"nfc.unitlist": {
+					"code": "company.employee_card",
+					"caption": "Личное дело сотрудника",
+					"pcode": null,
+					"mdl": "company",
+					"opt": {
+						"divideType": null,
+						"idGenMethod": "self",
+						"useCatalogs": null,
+						"useChronicle": false,
+						"useHierarchy": false
+					},
+					"#details": [
+						{
+							"nfc.unitbps": {
+								"code": "company.employee_card.add",
+								"caption": "Добавление",
+								"exec_function": null,
+								"use_privs": true
+							}
+						},
+						{
+							"nfc.unitbps": {
+								"code": "company.employee_card.del",
+								"caption": "Удаление",
+								"exec_function": null,
+								"use_privs": true
+							}
+						},
+						{
+							"nfc.unitbps": {
+								"code": "company.employee_card.upd",
+								"caption": "Исправление",
+								"exec_function": null,
+								"use_privs": true
+							}
+						}
+					]
+				}
+			},
+			{
+				"nfc.unitlist": {
+					"code": "company.employee_card_inoperability",
+					"caption": "Временная нетрудоспособность сотрудника на позиции",
+					"pcode": null,
+					"mdl": "company",
+					"opt": {
+						"divideType": null,
+						"idGenMethod": "self",
+						"useCatalogs": null,
+						"useChronicle": false,
+						"useHierarchy": false
+					},
+					"#details": [
+						{
+							"nfc.unitbps": {
+								"code": "company.employee_card_inoperability.add",
+								"caption": "Добавление",
+								"exec_function": null,
+								"use_privs": true
+							}
+						},
+						{
+							"nfc.unitbps": {
+								"code": "company.employee_card_inoperability.del",
+								"caption": "Удаление",
+								"exec_function": null,
+								"use_privs": true
+							}
+						},
+						{
+							"nfc.unitbps": {
+								"code": "company.employee_card_inoperability.upd",
+								"caption": "Исправление",
+								"exec_function": null,
+								"use_privs": true
+							}
+						}
+					]
+				}
+			},
+			{
+				"nfc.unitlist": {
+					"code": "company.employee_contact",
+					"caption": "Контакт сотрудника",
+					"pcode": null,
+					"mdl": "company",
+					"opt": {
+						"divideType": null,
+						"idGenMethod": "self",
+						"useCatalogs": null,
+						"useChronicle": false,
+						"useHierarchy": false
+					},
+					"#details": [
+						{
+							"nfc.unitbps": {
+								"code": "company.employee_contact.add",
+								"caption": "Добавление",
+								"exec_function": null,
+								"use_privs": true
+							}
+						},
+						{
+							"nfc.unitbps": {
+								"code": "company.employee_contact.del",
+								"caption": "Удаление",
+								"exec_function": null,
+								"use_privs": true
+							}
+						},
+						{
+							"nfc.unitbps": {
+								"code": "company.employee_contact.upd",
+								"caption": "Исправление",
+								"exec_function": null,
+								"use_privs": true
+							}
+						}
+					]
+				}
+			}
+		]
+	}
+}
+]

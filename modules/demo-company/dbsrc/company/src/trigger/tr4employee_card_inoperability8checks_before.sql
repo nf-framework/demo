@@ -1,0 +1,1 @@
+CREATE TRIGGER tr4employee_card_inoperability8checks_before BEFORE INSERT OR UPDATE ON company.employee_card_inoperability FOR EACH ROW EXECUTE PROCEDURE company.f4employee_card_inoperability8tr_checks();

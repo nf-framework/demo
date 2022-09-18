@@ -1,0 +1,8 @@
+{
+  "name": "demo-company",
+  "version": "1.0.0",
+  "description": "Демонстрация разработки на платформе NF",
+  "license": "ISC",
+  "author": "The NF Project Authors",
+  "type": "module"
+}

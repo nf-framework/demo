@@ -1,0 +1,30 @@
+{
+    "name": "demo",
+    "version": "1.0.0",
+    "description": "Demo app",
+    "private": true,
+    "type": "module",
+    "main": "index.js",
+    "workspaces": [
+        "modules/*"
+    ],
+    "scripts": {
+        "start": "node index.js",
+        "migrate": "node index --domigrate=true"
+    },
+    "dependencies": {
+        "demo-company": "^1.0.0",
+        "@nfjs/auth": "^1.0.0",
+        "@nfjs/back": "^1.0.0",
+        "@nfjs/back-dbfw": "^1.0.0",
+        "@nfjs/back-dbfw-ui-pl": "^1.0.0",
+        "@nfjs/core": "^1.0.0",
+        "@nfjs/db-postgres": "^1.0.0",
+        "@nfjs/front-pl": "^1.0.0",
+        "@nfjs/front-server": "^1.0.0",
+        "@nfjs/migrate": "^1.0.0"
+    },
+    "engines": {
+        "node": ">=14.0"
+    }
+}
