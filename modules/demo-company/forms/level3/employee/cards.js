@@ -65,7 +65,7 @@ export default class EmployeeAdd extends PlForm {
                                 <pl-datetime min="[[inop.date_begin]]" value="{{inop.date_end}}" orientation="horizontal" label="Дата окончания"></pl-datetime>
                             </pl-flex-layout>
                             <pl-combobox orientation="horizontal" data="[[inoperability_types]]" label="Причина" value="{{inop.type}}" required></pl-combobox>
-                            <pl-textarea stretch label="Описание причины" required="[[!_eq(inop.type, '2')]]" value="{{inop.other_type_description}}" orientation="horizontal" ></pl-textarea>
+                            <pl-textarea stretch label="Описание причины" required disabled="[[!_eq(inop.type, '2')]]" value="{{inop.other_type_description}}" orientation="horizontal" ></pl-textarea>
                         </pl-flex-layout>
                     </template>
                 </pl-flex-layout>

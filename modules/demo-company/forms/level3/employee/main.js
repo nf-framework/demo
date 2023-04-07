@@ -61,7 +61,7 @@ export default class EmployeeAdd extends PlForm {
     static get template() {
         return html`
             <pl-valid-observer invalid="{{invalid}}"></pl-valid-observer>
-            <pl-flex-layout scrollable vertical fit>
+            <pl-flex-layout vertical fit>
                 <pl-flex-layout>
                     <pl-button label="Сохранить" variant="primary" disabled="[[invalid]]" on-click="[[onSaveClick]]">
                         <pl-icon iconset="pl-default" size="16" icon="save" slot="prefix"></pl-icon>
