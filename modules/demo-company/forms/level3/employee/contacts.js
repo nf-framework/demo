@@ -27,7 +27,6 @@ export default class EmployeeAdd extends PlForm {
         }
     }
 
-
     static get template() {
         return html`
             <pl-valid-observer invalid="{{invalid}}"></pl-valid-observer>
@@ -37,9 +36,9 @@ export default class EmployeeAdd extends PlForm {
                     <pl-icon iconset="pl-default" size="16" icon="plus" slot="prefix"></pl-icon>
                 </pl-button>
                 <template d:repeat="{{contacts}}">
-                    <pl-flex-layout align="flex-end">
-                        <pl-combobox data="[[contact_types]]" placeholder="Тип" value="{{item.contact_type}}" required></pl-combobox>
-                        <pl-input disabled="[[!item.contact_type]]" placeholder="Контакт" value="{{item.contact}}" required pattern="[[_getPattern(item.contact_type)]]">
+                    <pl-flex-layout align="flex-end" style="width: 480px;">
+                        <pl-combobox stretch data="[[contact_types]]" placeholder="Тип" value="{{item.contact_type}}" required></pl-combobox>
+                        <pl-input stretch disabled="[[!item.contact_type]]" placeholder="Контакт" value="{{item.contact}}" required pattern="[[_getPattern(item.contact_type)]]">
                             <pl-input-mask mask="[[_getMask(item.contact_type)]]" unmasked-value="{{item.unmaskedValue}}">
                             </pl-input-mask>
                         </pl-input>

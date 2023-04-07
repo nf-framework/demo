@@ -46,29 +46,30 @@ export default class EmployeeAdd extends PlForm {
                 <pl-icon iconset="pl-default" size="16" icon="plus" slot="prefix"></pl-icon>
             </pl-button>
             <template d:repeat="{{cards}}">
-                <pl-flex-layout vertical>
-                    <pl-flex-layout align="flex-end">
+                <pl-card header="Личное дело">
+                    <pl-icon-button variant="ghost" iconset="pl-default" size="16" icon="trashcan" slot="tools" on-click="[[onCardDelClick]]"></pl-icon-button>
+                    <pl-flex-layout vertical>
                         <pl-datetime required max="[[item.date_end]]" value="{{item.date_begin}}" orientation="horizontal" label="Дата начала работы"></pl-datetime>
                         <pl-datetime min="[[item.date_begin]]" value="{{item.date_end}}" orientation="horizontal" label="Дата окончания работы"></pl-datetime>
-                    </pl-flex-layout>
-                    <pl-combobox orientation="horizontal" data="[[position_types]]" label="Должность" value="{{item.position}}" required></pl-combobox>
-                    <pl-input type="number" step="0.1" min="0.1" max="1.5" orientation="horizontal" label="Ставка" required value="{{item.rate}}"></pl-input>
+                        <pl-combobox orientation="horizontal" data="[[position_types]]" label="Должность" value="{{item.position}}" required></pl-combobox>
+                        <pl-input type="number" step="0.1" min="0.1" max="1.5" orientation="horizontal" label="Ставка" required value="{{item.rate}}"></pl-input>
 
-                    <h4>Причины временной нетрудоспособности</h4>
-                    <pl-button variant="ghost" label="Добавить причину временной нетрудоспособности" on-click="[[onInoperabilityAddClick]]">
-                        <pl-icon iconset="pl-default" size="16" icon="plus" slot="prefix"></pl-icon>
-                    </pl-button>
-                    <template d:repeat="{{item.inoperabilities}}" d:as="inop">
-                        <pl-flex-layout vertical stretch>
-                            <pl-flex-layout align="flex-end">
-                                <pl-datetime required max="[[inop.date_end]]" value="{{inop.date_begin}}" orientation="horizontal" label="Дата начала"></pl-datetime>
-                                <pl-datetime min="[[inop.date_begin]]" value="{{inop.date_end}}" orientation="horizontal" label="Дата окончания"></pl-datetime>
+                        <h4>Причины временной нетрудоспособности</h4>
+                        <pl-button variant="ghost" label="Добавить причину временной нетрудоспособности" on-click="[[onInoperabilityAddClick]]">
+                            <pl-icon iconset="pl-default" size="16" icon="plus" slot="prefix"></pl-icon>
+                        </pl-button>
+                        <template d:repeat="{{item.inoperabilities}}" d:as="inop">
+                            <pl-flex-layout vertical stretch>
+                                <pl-flex-layout align="flex-end">
+                                    <pl-datetime required max="[[inop.date_end]]" value="{{inop.date_begin}}" orientation="horizontal" label="Дата начала"></pl-datetime>
+                                    <pl-datetime min="[[inop.date_begin]]" value="{{inop.date_end}}" orientation="horizontal" label="Дата окончания"></pl-datetime>
+                                </pl-flex-layout>
+                                <pl-combobox orientation="horizontal" data="[[inoperability_types]]" label="Причина" value="{{inop.type}}" required></pl-combobox>
+                                <pl-textarea stretch label="Описание причины" required disabled="[[!_eq(inop.type, '2')]]" value="{{inop.other_type_description}}" orientation="horizontal" ></pl-textarea>
                             </pl-flex-layout>
-                            <pl-combobox orientation="horizontal" data="[[inoperability_types]]" label="Причина" value="{{inop.type}}" required></pl-combobox>
-                            <pl-textarea stretch label="Описание причины" required disabled="[[!_eq(inop.type, '2')]]" value="{{inop.other_type_description}}" orientation="horizontal" ></pl-textarea>
-                        </pl-flex-layout>
-                    </template>
-                </pl-flex-layout>
+                        </template>
+                    </pl-flex-layout>
+                </pl-card>
             </template>
         </pl-flex-layout>
     `;
@@ -85,7 +86,7 @@ export default class EmployeeAdd extends PlForm {
         this.splice('cards', this.cards.indexOf(event.model.item), 1);
     }
 
-    onInoperabilityAddClick(event){
+    onInoperabilityAddClick(event) {
         this.push(`cards.${this.cards.indexOf(event.model.item)}.inoperabilities`, {});
     }
 
