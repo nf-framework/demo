@@ -20,7 +20,7 @@ export async function list(context) {
 }
 
 export async function get(context) {
-    const resp = await dbapi.query(`select * from company.v4employee where id = :employeeId
+    const resp = await dbapi.query(`select * from co. mpany.v4employee where id = :employeeId
     `, { employeeId: context.body.args.employeeId }, { context: context });
 
     context.send({ data: resp.data[0] });

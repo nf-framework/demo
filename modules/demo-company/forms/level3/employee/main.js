@@ -2,8 +2,7 @@ import { html, css } from "polylib";
 import { PlForm } from "@nfjs/front-pl/components/pl-form.js";
 
 export default class EmployeeAdd extends PlForm {
-    static get properties() {
-        return {
+    static  properties = {
             formTitle: {
                 type: String,
                 value: 'Сотрудник'
@@ -55,44 +54,41 @@ export default class EmployeeAdd extends PlForm {
                 type: Array,
                 value: ['employeeId']
             }
-        }
     }
 
-    static get template() {
-        return html`
-            <pl-valid-observer invalid="{{invalid}}"></pl-valid-observer>
-            <pl-flex-layout vertical fit>
-                <pl-flex-layout>
-                    <pl-button label="Сохранить" variant="primary" disabled="[[invalid]]" on-click="[[onSaveClick]]">
-                        <pl-icon iconset="pl-default" size="16" icon="save" slot="prefix"></pl-icon>
-                    </pl-button>
-                    <pl-button label="Отменить" variant="secondary" on-click="[[close]]">
-                        <pl-icon iconset="pl-default" size="16" icon="close" slot="prefix"></pl-icon>
-                    </pl-button>
-                </pl-flex-layout>
-                <pl-flex-layout fit>
-                    <pl-menu-form scrollable selected="main">
-                        <pl-menu-form-item name="main" label="Персональные данные">
-                            <pl-form-level3.employee.general invalid="{{employeeInvalid}}" employee="{{employee}}"></pl-form-level3.employee.general>
-                        </pl-menu-form-item>
-                        <pl-menu-form-item name="contacts" label="Контакты">
-                            <pl-form-level3.employee.contacts invalid="{{contactsInvalid}}" contacts="{{contacts}}"></pl-form-level3.employee.contacts>
-                        </pl-menu-form-item>
-                        <pl-menu-form-item name="cards" label="Личная карточка" fit>
-                            <pl-form-level3.employee.cards invalid="{{cardsInvalid}}" cards="{{cards}}"></pl-form-level3.employee.cards>
-                        </pl-menu-form-item>
-                    </pl-menu-form>
-                </pl-flex-layout>
+    static  template= html`
+        <pl-valid-observer invalid="{{invalid}}"></pl-valid-observer>
+        <pl-flex-layout vertical fit>
+            <pl-flex-layout>
+                <pl-button label="Сохранить" variant="primary" disabled="[[invalid]]" on-click="[[onSaveClick]]">
+                    <pl-icon iconset="pl-default" size="16" icon="save" slot="prefix"></pl-icon>
+                </pl-button>
+                <pl-button label="Отменить" variant="secondary" on-click="[[close]]">
+                    <pl-icon iconset="pl-default" size="16" icon="close" slot="prefix"></pl-icon>
+                </pl-button>
             </pl-flex-layout>
-            <pl-action args="[[_compose('employeeId',employeeId)]]" id="aGet" data="{{employee}}" endpoint="/employee/get">
-            </pl-action>
-            <pl-action id="aSave" endpoint="/employee/save"></pl-action>
-            <pl-dataset args="[[_compose('employeeId',employeeId)]]" id="dsContacts" data="{{contacts}}"
-                endpoint="/employee/contactsList"></pl-dataset>
-            <pl-data-observer id="obEmployee" data="{{employee}}" is-changed="{{isEmployeeChanged}}"></pl-data-observer>
-            <pl-data-observer id="obEmployeeContacts" data="{{contacts}}" is-changed="{{isContactsChanged}}"></pl-data-observer>
-		`;
-    }
+            <pl-flex-layout fit>
+                <pl-menu-form scrollable selected="main">
+                    <pl-menu-form-item name="main" label="Персональные данные">
+                        <pl-form-level3.employee.general invalid="{{employeeInvalid}}" employee="{{employee}}"></pl-form-level3.employee.general>
+                    </pl-menu-form-item>
+                    <pl-menu-form-item name="contacts" label="Контакты">
+                        <pl-form-level3.employee.contacts invalid="{{contactsInvalid}}" contacts="{{contacts}}"></pl-form-level3.employee.contacts>
+                    </pl-menu-form-item>
+                    <pl-menu-form-item name="cards" label="Личная карточка" fit>
+                        <pl-form-level3.employee.cards invalid="{{cardsInvalid}}" cards="{{cards}}"></pl-form-level3.employee.cards>
+                    </pl-menu-form-item>
+                </pl-menu-form>
+            </pl-flex-layout>
+        </pl-flex-layout>
+        <pl-action args="[[_compose('employeeId',employeeId)]]" id="aGet" data="{{employee}}" endpoint="/employee/get">
+        </pl-action>
+        <pl-action id="aSave" endpoint="/employee/save"></pl-action>
+        <pl-dataset args="[[_compose('employeeId',employeeId)]]" id="dsContacts" data="{{contacts}}"
+            endpoint="/employee/contactsList"></pl-dataset>
+        <pl-data-observer id="obEmployee" data="{{employee}}" is-changed="{{isEmployeeChanged}}"></pl-data-observer>
+        <pl-data-observer id="obEmployeeContacts" data="{{contacts}}" is-changed="{{isContactsChanged}}"></pl-data-observer>
+    `;
 
     onConnect() {
         if (this.employeeId) {
