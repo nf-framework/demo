@@ -1,0 +1,8 @@
+{
+  "name": "generated",
+  "version": "1.0.0",
+  "description": "Generated demo module with Polylib calendar",
+  "license": "ISC",
+  "author": "Codex",
+  "type": "module"
+}

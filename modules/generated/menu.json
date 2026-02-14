@@ -1,0 +1,56 @@
+[
+  {
+    "caption": "Generated",
+    "path": "",
+    "icon": "date",
+    "order": 80
+  },
+  {
+    "caption": "Календарь (Polylib)",
+    "path": "Generated",
+    "icon": "date",
+    "form": "generated.calendar_demo",
+    "guid": "2ea78ea8-c360-4e89-ac88-4c3c6a4f9a21",
+    "order": 1
+  },
+  {
+    "caption": "Dashboard",
+    "path": "Generated",
+    "icon": "home",
+    "form": "dashboard",
+    "guid": "c65d6dd7-b5a5-4e2f-a686-ce17b515eb26",
+    "order": 0
+  },
+  {
+    "caption": "pl-table: Settings",
+    "path": "Generated",
+    "icon": "date",
+    "form": "generated.table_settings",
+    "guid": "3d302779-f5db-4f85-a80e-b1305dcdf699",
+    "order": 2
+  },
+  {
+    "caption": "pl-table: Span",
+    "path": "Generated",
+    "icon": "date",
+    "form": "generated.table_span",
+    "guid": "467023e5-a278-41f4-88c0-c53d8e9f80f5",
+    "order": 3
+  },
+  {
+    "caption": "pl-table: Master Detail",
+    "path": "Generated",
+    "icon": "date",
+    "form": "generated.table_master_detail",
+    "guid": "44bc7f63-f84e-4498-8c90-2b735236fb71",
+    "order": 4
+  },
+  {
+    "caption": "pl-table: Deep Groups",
+    "path": "Generated",
+    "icon": "date",
+    "form": "generated.table_group_deep",
+    "guid": "a0ed59af-4c9a-45f4-a2e0-e1c2d4a55b10",
+    "order": 5
+  }
+]

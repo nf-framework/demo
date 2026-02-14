@@ -23,6 +23,7 @@ temp/
 sessions/
 uploads/
 migrate_file.sql
+docs/
 
 # Runtime data #
 ################1

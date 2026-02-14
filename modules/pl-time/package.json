@@ -1,0 +1,8 @@
+{
+  "name": "pl-time",
+  "version": "1.0.0",
+  "description": "Polylib time picker component",
+  "license": "ISC",
+  "author": "Codex",
+  "type": "module"
+}

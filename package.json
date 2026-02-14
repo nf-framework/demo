@@ -6,11 +6,14 @@
     "type": "module",
     "main": "index.js",
     "workspaces": [
-        "modules/*"
+        "modules/*",
+        "packages/*"
     ],
     "scripts": {
         "start": "node index.js",
-        "migrate": "node index --domigrate=true"
+        "migrate": "node index --domigrate=true",
+        "test:generated-calendar": "node --test modules/generated/tests/*.test.js",
+        "test:pl-time": "node --test modules/pl-time/tests/*.test.js"
     },
     "dependencies": {
         "demo-company": "^1.0.0",
