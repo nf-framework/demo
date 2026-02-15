@@ -1,0 +1,271 @@
+{
+    "schema": "generated",
+    "tablename": "table_settings",
+    "comment": null,
+    "cols": [
+        {
+            "name": "id",
+            "datatype": "int8",
+            "datatype_length": null,
+            "datatype_full": "bigint",
+            "required": true,
+            "default_value": "nextval('generated.s4table_settings'::text::regclass)",
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 1
+        },
+        {
+            "name": "incident_id",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 2
+        },
+        {
+            "name": "created_at",
+            "datatype": "timestamp",
+            "datatype_length": null,
+            "datatype_full": "timestamp without time zone",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 3
+        },
+        {
+            "name": "service",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 4
+        },
+        {
+            "name": "environment",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 5
+        },
+        {
+            "name": "severity",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 6
+        },
+        {
+            "name": "status",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 7
+        },
+        {
+            "name": "region",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 8
+        },
+        {
+            "name": "channel",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 9
+        },
+        {
+            "name": "category",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 10
+        },
+        {
+            "name": "summary",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 11
+        },
+        {
+            "name": "updated_at",
+            "datatype": "timestamp",
+            "datatype_length": null,
+            "datatype_full": "timestamp without time zone",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 12
+        },
+        {
+            "name": "owner_name",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 13
+        },
+        {
+            "name": "squad",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 14
+        },
+        {
+            "name": "owner_role",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 15
+        },
+        {
+            "name": "sla_response_min",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 16
+        },
+        {
+            "name": "sla_repair_min",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 17
+        },
+        {
+            "name": "sla_risk",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 18
+        },
+        {
+            "name": "plan_hours",
+            "datatype": "numeric",
+            "datatype_length": "8,2",
+            "datatype_full": "numeric(8,2)",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 19
+        },
+        {
+            "name": "fact_hours",
+            "datatype": "numeric",
+            "datatype_length": "8,2",
+            "datatype_full": "numeric(8,2)",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 20
+        },
+        {
+            "name": "variance_hours",
+            "datatype": "numeric",
+            "datatype_length": "8,2",
+            "datatype_full": "numeric(8,2)",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 21
+        }
+    ],
+    "cons": [
+        {
+            "name": "table_settings_incident_id_key",
+            "schema": "generated",
+            "type": "u",
+            "update_rule": null,
+            "delete_rule": null,
+            "condition": null,
+            "definition": "UNIQUE (incident_id)",
+            "r_schema": null,
+            "r_tablename": null,
+            "r_columnname": null,
+            "columns": "incident_id",
+            "comment": null,
+            "deferrable": null
+        },
+        {
+            "name": "table_settings_pkey",
+            "schema": "generated",
+            "type": "p",
+            "update_rule": null,
+            "delete_rule": null,
+            "condition": null,
+            "definition": "PRIMARY KEY (id)",
+            "r_schema": null,
+            "r_tablename": null,
+            "r_columnname": null,
+            "columns": "id",
+            "comment": null,
+            "deferrable": null
+        }
+    ],
+    "indx": null
+}

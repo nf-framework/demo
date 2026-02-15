@@ -108,15 +108,19 @@ test('moveColumnInSettings moves child only inside same group', () => {
   assert.equal(crossGroup.changed, false);
 });
 
-test('normalizeSettings keeps groupBy only for existing leaf columns', () => {
+test('normalizeSettings keeps groupBy levels only for existing leaf columns', () => {
   const schema = normalizeColumns(makeColumns());
-  const leaf = collectLeafColumns(schema).find((column) => column.field === 'status');
+  const leafStatus = collectLeafColumns(schema).find((column) => column.field === 'status');
+  const leafOwner = collectLeafColumns(schema).find((column) => column.field === 'owner');
 
   const invalid = normalizeSettings(schema, { groupBy: 'missing-column' });
-  assert.equal(invalid.groupBy, null);
+  assert.deepEqual(invalid.groupBy, []);
 
-  const valid = normalizeSettings(schema, { groupBy: leaf.id });
-  assert.equal(valid.groupBy, leaf.id);
+  const validSingle = normalizeSettings(schema, { groupBy: leafStatus.id });
+  assert.deepEqual(validSingle.groupBy, [leafStatus.id]);
+
+  const validArray = normalizeSettings(schema, { groupBy: [leafOwner.id, 'missing-column', leafStatus.id, leafOwner.id] });
+  assert.deepEqual(validArray.groupBy, [leafOwner.id, leafStatus.id]);
 });
 
 test('isTopLevelOrSameGroup allows only same parent container', () => {
@@ -153,4 +157,103 @@ test('normalizeColumns builds tree from flat columns with groupPath metadata', (
   assert.equal(q1.children.length, 2);
   assert.equal(q1.children[0].children.length, 1);
   assert.equal(q1.children[1].children.length, 1);
+});
+
+test('deep nesting supports moving inside same parent on any level', () => {
+  const schema = normalizeColumns([
+    { id: 'service', field: 'service', header: 'Service' },
+    {
+      id: 'finance',
+      header: 'Finance',
+      children: [
+        {
+          id: 'q1',
+          header: 'Q1',
+          children: [
+            {
+              id: 'jan',
+              header: 'Jan',
+              children: [
+                { id: 'jan_plan', field: 'jan_plan', header: 'Plan' },
+                { id: 'jan_fact', field: 'jan_fact', header: 'Fact' }
+              ]
+            },
+            {
+              id: 'feb',
+              header: 'Feb',
+              children: [
+                { id: 'feb_plan', field: 'feb_plan', header: 'Plan' },
+                { id: 'feb_fact', field: 'feb_fact', header: 'Fact' }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]);
+
+  const settings = createDefaultSettings(schema);
+  const map = collectColumnMap(schema);
+
+  const finance = schema.find((column) => column.id === 'finance');
+  const q1 = finance.children.find((column) => column.id === 'q1');
+  const jan = q1.children.find((column) => column.id === 'jan');
+  const feb = q1.children.find((column) => column.id === 'feb');
+
+  const moveGroups = moveColumnInSettings(
+    settings,
+    { id: jan.id, parentId: q1.id },
+    { id: feb.id, parentId: q1.id }
+  );
+
+  assert.equal(moveGroups.changed, true);
+  assert.deepEqual(moveGroups.settings.childOrder[q1.id], [feb.id, jan.id]);
+
+  const moveLeafInJan = moveColumnInSettings(
+    settings,
+    { id: 'jan_plan', parentId: jan.id },
+    { id: 'jan_fact', parentId: jan.id }
+  );
+
+  assert.equal(moveLeafInJan.changed, true);
+  assert.deepEqual(moveLeafInJan.settings.childOrder[jan.id], ['jan_fact', 'jan_plan']);
+
+  const crossParent = moveColumnInSettings(
+    settings,
+    { id: 'jan_plan', parentId: jan.id },
+    { id: 'feb_plan', parentId: feb.id }
+  );
+
+  assert.equal(crossParent.changed, false);
+
+  assert.equal(isTopLevelOrSameGroup(map, jan.id, feb.id), true);
+  assert.equal(isTopLevelOrSameGroup(map, 'jan_plan', 'jan_fact'), true);
+  assert.equal(isTopLevelOrSameGroup(map, 'jan_plan', 'feb_plan'), false);
+});
+
+test('merge is controlled by column settings and normalized settings map', () => {
+  const schema = normalizeColumns([
+    { id: 'portfolio', field: 'portfolio', header: 'Портфель', settings: { merge: true } },
+    { id: 'project', field: 'project', header: 'Проект' }
+  ]);
+
+  const defaults = createDefaultSettings(schema);
+  assert.equal(defaults.merge.portfolio, true);
+  assert.equal(defaults.merge.project, false);
+
+  const overridden = normalizeSettings(schema, {
+    ...defaults,
+    merge: {
+      ...defaults.merge,
+      portfolio: false,
+      project: true
+    }
+  });
+
+  const applied = applySettingsToColumns(schema, overridden);
+  const portfolio = applied.leafColumns.find((column) => column.id === 'portfolio');
+  const project = applied.leafColumns.find((column) => column.id === 'project');
+
+  assert.equal(portfolio.merge, false);
+  assert.equal(project.merge, true);
 });

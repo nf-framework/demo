@@ -1,0 +1,271 @@
+{
+    "schema": "generated",
+    "tablename": "table_span",
+    "comment": null,
+    "cols": [
+        {
+            "name": "id",
+            "datatype": "int8",
+            "datatype_length": null,
+            "datatype_full": "bigint",
+            "required": true,
+            "default_value": "nextval('generated.s4table_span'::text::regclass)",
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 1
+        },
+        {
+            "name": "portfolio",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 2
+        },
+        {
+            "name": "project_code",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 3
+        },
+        {
+            "name": "project_name",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 4
+        },
+        {
+            "name": "customer",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 5
+        },
+        {
+            "name": "project_manager",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 6
+        },
+        {
+            "name": "stage",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 7
+        },
+        {
+            "name": "priority",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 8
+        },
+        {
+            "name": "annual_plan_k",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 9
+        },
+        {
+            "name": "jan_k",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 10
+        },
+        {
+            "name": "feb_k",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 11
+        },
+        {
+            "name": "mar_k",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 12
+        },
+        {
+            "name": "apr_k",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 13
+        },
+        {
+            "name": "may_k",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 14
+        },
+        {
+            "name": "jun_k",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 15
+        },
+        {
+            "name": "jul_k",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 16
+        },
+        {
+            "name": "aug_k",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 17
+        },
+        {
+            "name": "sep_k",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 18
+        },
+        {
+            "name": "oct_k",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 19
+        },
+        {
+            "name": "nov_k",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 20
+        },
+        {
+            "name": "dec_k",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 21
+        }
+    ],
+    "cons": [
+        {
+            "name": "table_span_pkey",
+            "schema": "generated",
+            "type": "p",
+            "update_rule": null,
+            "delete_rule": null,
+            "condition": null,
+            "definition": "PRIMARY KEY (id)",
+            "r_schema": null,
+            "r_tablename": null,
+            "r_columnname": null,
+            "columns": "id",
+            "comment": null,
+            "deferrable": null
+        },
+        {
+            "name": "table_span_project_code_key",
+            "schema": "generated",
+            "type": "u",
+            "update_rule": null,
+            "delete_rule": null,
+            "condition": null,
+            "definition": "UNIQUE (project_code)",
+            "r_schema": null,
+            "r_tablename": null,
+            "r_columnname": null,
+            "columns": "project_code",
+            "comment": null,
+            "deferrable": null
+        }
+    ],
+    "indx": null
+}

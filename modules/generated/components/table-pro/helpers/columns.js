@@ -10,6 +10,15 @@ export function cloneColumns(columns) {
   return JSON.parse(JSON.stringify(Array.isArray(columns) ? columns : []));
 }
 
+export function normalizeFixed(value) {
+  if (value === true) return 'left';
+  if (value === false || value == null) return '';
+  const normalized = String(value).trim().toLowerCase();
+  if (normalized === 'left' || normalized === 'start') return 'left';
+  if (normalized === 'right' || normalized === 'end') return 'right';
+  return '';
+}
+
 function resolveGroupPath(column) {
   if (Array.isArray(column?.groupPath)) {
     return column.groupPath.map((part) => String(part || '').trim()).filter(Boolean);
@@ -170,11 +179,35 @@ function mergeOrder(base, current) {
   return kept;
 }
 
+function readFixedDefault(column) {
+  if (column?.settings && typeof column.settings === 'object'
+    && Object.prototype.hasOwnProperty.call(column.settings, 'fixed')) {
+    return normalizeFixed(column.settings.fixed);
+  }
+  if (Object.prototype.hasOwnProperty.call(column || {}, 'fixed')) {
+    return normalizeFixed(column.fixed);
+  }
+  return '';
+}
+
 export function createDefaultSettings(columns) {
   const normalized = normalizeColumns(columns);
   const topOrder = normalized.map((column) => column.id);
   const hidden = {};
+  const merge = {};
+  const fixed = {};
   const childOrder = {};
+
+  function readMergeDefault(column) {
+    if (column?.settings && typeof column.settings === 'object'
+      && Object.prototype.hasOwnProperty.call(column.settings, 'merge')) {
+      return Boolean(column.settings.merge);
+    }
+    if (Object.prototype.hasOwnProperty.call(column || {}, 'merge')) {
+      return Boolean(column.merge);
+    }
+    return false;
+  }
 
   function walk(items) {
     items.forEach((column) => {
@@ -183,6 +216,8 @@ export function createDefaultSettings(columns) {
         walk(column.children);
       } else {
         hidden[column.id] = Boolean(column.hidden);
+        merge[column.id] = readMergeDefault(column);
+        fixed[column.id] = readFixedDefault(column);
       }
     });
   }
@@ -192,7 +227,9 @@ export function createDefaultSettings(columns) {
     topOrder,
     childOrder,
     hidden,
-    groupBy: null
+    merge,
+    fixed,
+    groupBy: []
   };
 }
 
@@ -208,6 +245,20 @@ export function normalizeSettings(columns, inputSettings) {
     }
   });
 
+  const merge = { ...defaults.merge };
+  Object.keys(merge).forEach((id) => {
+    if (Object.prototype.hasOwnProperty.call(provided.merge || {}, id)) {
+      merge[id] = Boolean(provided.merge[id]);
+    }
+  });
+
+  const fixed = { ...defaults.fixed };
+  Object.keys(fixed).forEach((id) => {
+    if (Object.prototype.hasOwnProperty.call(provided.fixed || {}, id)) {
+      fixed[id] = normalizeFixed(provided.fixed[id]);
+    }
+  });
+
   const childOrder = { ...defaults.childOrder };
   Object.keys(childOrder).forEach((groupId) => {
     childOrder[groupId] = mergeOrder(childOrder[groupId], provided.childOrder?.[groupId]);
@@ -216,12 +267,22 @@ export function normalizeSettings(columns, inputSettings) {
   const topOrder = mergeOrder(defaults.topOrder, provided.topOrder);
 
   const leafIds = new Set(collectLeafColumns(normalized).map((column) => column.id));
-  const groupBy = leafIds.has(provided.groupBy) ? provided.groupBy : null;
+  const groupBySource = Array.isArray(provided.groupBy)
+    ? provided.groupBy
+    : (provided.groupBy ? [provided.groupBy] : []);
+  const groupBy = [];
+  groupBySource.forEach((columnId) => {
+    const nextId = String(columnId || '').trim();
+    if (!nextId || !leafIds.has(nextId) || groupBy.includes(nextId)) return;
+    groupBy.push(nextId);
+  });
 
   return {
     topOrder,
     childOrder,
     hidden,
+    merge,
+    fixed,
     groupBy
   };
 }
@@ -244,6 +305,8 @@ export function applySettingsToColumns(columns, settings) {
       } else {
         next._isGroup = false;
         next._hidden = Boolean(normalizedSettings.hidden[next.id]);
+        next.merge = Boolean(normalizedSettings.merge?.[next.id]);
+        next.fixed = normalizeFixed(normalizedSettings.fixed?.[next.id]);
       }
       return next;
     }).filter((column) => !column._hidden);

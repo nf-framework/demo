@@ -1,0 +1,409 @@
+[
+  {
+    "nfc.modulelist": {
+      "code": "generated",
+      "caption": "Generated demo",
+      "#details": [
+        {
+          "nfc.unitlist": {
+            "code": "generated.table_settings",
+            "caption": "Generated: Table Settings",
+            "pcode": null,
+            "mdl": "generated",
+            "opt": {
+              "divideType": null,
+              "idGenMethod": "self",
+              "useCatalogs": null,
+              "useChronicle": false,
+              "useHierarchy": false
+            },
+            "#details": [
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_settings.add",
+                  "caption": "Добавление",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_settings.upd",
+                  "caption": "Исправление",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_settings.del",
+                  "caption": "Удаление",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_settings.get",
+                  "caption": "Получение",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_settings.find",
+                  "caption": "Поиск",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              }
+            ]
+          }
+        },
+        {
+          "nfc.unitlist": {
+            "code": "generated.table_span",
+            "caption": "Generated: Table Span",
+            "pcode": null,
+            "mdl": "generated",
+            "opt": {
+              "divideType": null,
+              "idGenMethod": "self",
+              "useCatalogs": null,
+              "useChronicle": false,
+              "useHierarchy": false
+            },
+            "#details": [
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_span.add",
+                  "caption": "Добавление",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_span.upd",
+                  "caption": "Исправление",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_span.del",
+                  "caption": "Удаление",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_span.get",
+                  "caption": "Получение",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_span.find",
+                  "caption": "Поиск",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              }
+            ]
+          }
+        },
+        {
+          "nfc.unitlist": {
+            "code": "generated.table_deep_groups",
+            "caption": "Generated: Table Deep Groups",
+            "pcode": null,
+            "mdl": "generated",
+            "opt": {
+              "divideType": null,
+              "idGenMethod": "self",
+              "useCatalogs": null,
+              "useChronicle": false,
+              "useHierarchy": false
+            },
+            "#details": [
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_deep_groups.add",
+                  "caption": "Добавление",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_deep_groups.upd",
+                  "caption": "Исправление",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_deep_groups.del",
+                  "caption": "Удаление",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_deep_groups.get",
+                  "caption": "Получение",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_deep_groups.find",
+                  "caption": "Поиск",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              }
+            ]
+          }
+        },
+        {
+          "nfc.unitlist": {
+            "code": "generated.table_master",
+            "caption": "Generated: Table Master",
+            "pcode": null,
+            "mdl": "generated",
+            "opt": {
+              "divideType": null,
+              "idGenMethod": "self",
+              "useCatalogs": null,
+              "useChronicle": false,
+              "useHierarchy": false
+            },
+            "#details": [
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_master.add",
+                  "caption": "Добавление",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_master.upd",
+                  "caption": "Исправление",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_master.del",
+                  "caption": "Удаление",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_master.get",
+                  "caption": "Получение",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_master.find",
+                  "caption": "Поиск",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              }
+            ]
+          }
+        },
+        {
+          "nfc.unitlist": {
+            "code": "generated.table_tree",
+            "caption": "Generated: Table Tree",
+            "pcode": null,
+            "mdl": "generated",
+            "opt": {
+              "divideType": null,
+              "idGenMethod": "self",
+              "useCatalogs": null,
+              "useChronicle": false,
+              "useHierarchy": false
+            },
+            "#details": [
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_tree.add",
+                  "caption": "Добавление",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_tree.upd",
+                  "caption": "Исправление",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_tree.del",
+                  "caption": "Удаление",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_tree.get",
+                  "caption": "Получение",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_tree.find",
+                  "caption": "Поиск",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              }
+            ]
+          }
+        },
+        {
+          "nfc.unitlist": {
+            "code": "generated.table_inline_edit",
+            "caption": "Generated: Table Inline Edit",
+            "pcode": null,
+            "mdl": "generated",
+            "opt": {
+              "divideType": null,
+              "idGenMethod": "self",
+              "useCatalogs": null,
+              "useChronicle": false,
+              "useHierarchy": false
+            },
+            "#details": [
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_inline_edit.add",
+                  "caption": "Добавление",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_inline_edit.upd",
+                  "caption": "Исправление",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_inline_edit.del",
+                  "caption": "Удаление",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_inline_edit.get",
+                  "caption": "Получение",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_inline_edit.find",
+                  "caption": "Поиск",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              }
+            ]
+          }
+        },
+        {
+          "nfc.unitlist": {
+            "code": "generated.table_load_10000",
+            "caption": "Generated: Table Load 10k x 50",
+            "pcode": null,
+            "mdl": "generated",
+            "opt": {
+              "divideType": null,
+              "idGenMethod": "self",
+              "useCatalogs": null,
+              "useChronicle": false,
+              "useHierarchy": false
+            },
+            "#details": [
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_load_10000.add",
+                  "caption": "Добавление",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_load_10000.upd",
+                  "caption": "Исправление",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_load_10000.del",
+                  "caption": "Удаление",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_load_10000.get",
+                  "caption": "Получение",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              },
+              {
+                "nfc.unitbps": {
+                  "code": "generated.table_load_10000.find",
+                  "caption": "Поиск",
+                  "exec_function": null,
+                  "use_privs": false
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

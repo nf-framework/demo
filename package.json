@@ -25,7 +25,8 @@
         "@nfjs/db-postgres": "^1.0.0",
         "@nfjs/front-pl": "^1.0.0",
         "@nfjs/front-server": "^1.0.0",
-        "@nfjs/migrate": "^1.0.0"
+        "@nfjs/migrate": "^1.0.0",
+        "portal": "^1.0.0"
     },
     "engines": {
         "node": ">=14.0"

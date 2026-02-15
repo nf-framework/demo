@@ -3,7 +3,6 @@ import { web } from '@nfjs/back';
 import { api } from '@nfjs/core';
 import { registerCustomElementsDir, registerLibDir } from '@nfjs/front-server';
 import { listEvents, saveEvents, resetEvents } from './lib/calendar.js';
-import { listTableSettings, listTableSpan, listTableDeepGroups, listTableMasters, listTableDetails } from './lib/table-datasets.js';
 
 const meta = {
   require: {
@@ -28,11 +27,6 @@ async function init() {
   web.on('POST', '/generated/calendar/events', { middleware: ['session', 'auth', 'json'] }, listEvents);
   web.on('POST', '/generated/calendar/save', { middleware: ['session', 'auth', 'json'] }, saveEvents);
   web.on('POST', '/generated/calendar/reset', { middleware: ['session', 'auth', 'json'] }, resetEvents);
-  web.on('POST', '/generated/table/settings', { middleware: ['session', 'auth', 'json'] }, listTableSettings);
-  web.on('POST', '/generated/table/span', { middleware: ['session', 'auth', 'json'] }, listTableSpan);
-  web.on('POST', '/generated/table/deep-groups', { middleware: ['session', 'auth', 'json'] }, listTableDeepGroups);
-  web.on('POST', '/generated/table/master-detail/masters', { middleware: ['session', 'auth', 'json'] }, listTableMasters);
-  web.on('POST', '/generated/table/master-detail/details', { middleware: ['session', 'auth', 'json'] }, listTableDetails);
 }
 
 export {

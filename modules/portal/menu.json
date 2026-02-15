@@ -1,0 +1,168 @@
+[
+  {
+    "caption": "Portal",
+    "path": "",
+    "icon": "home",
+    "order": 90
+  },
+  {
+    "caption": "Главная",
+    "path": "Portal",
+    "icon": "home",
+    "form": "portal.dashboard",
+    "guid": "0f9206c8-06d9-44cc-a8ee-f77c6e46c2fd",
+    "order": 1
+  },
+  {
+    "caption": "Оргструктура",
+    "path": "Portal",
+    "icon": "date",
+    "form": "portal.org",
+    "guid": "d3d6f07f-1032-4472-932b-baf5e6f64503",
+    "order": 2
+  },
+  {
+    "caption": "Отдел (карточка)",
+    "path": "Portal",
+    "icon": "date",
+    "form": "portal.department_detail",
+    "guid": "f4184e34-05c2-4f65-af95-899f47a44bd4",
+    "order": 3
+  },
+  {
+    "caption": "Сотрудники",
+    "path": "Portal",
+    "icon": "date",
+    "form": "portal.people",
+    "guid": "4e34b437-5995-4e1d-9ad2-0e40a5716ba7",
+    "order": 4
+  },
+  {
+    "caption": "Мой профиль",
+    "path": "Portal",
+    "icon": "date",
+    "form": "portal.my_profile",
+    "guid": "496b6e2c-7524-4f9d-93d8-fec7e31dca67",
+    "order": 5
+  },
+  {
+    "caption": "Сотрудник (карточка)",
+    "path": "Portal",
+    "icon": "date",
+    "form": "portal.employee_detail",
+    "guid": "86ad1a6e-b65b-4e77-9368-d56f1e27e619",
+    "order": 6
+  },
+  {
+    "caption": "Задачи",
+    "path": "Portal",
+    "icon": "date",
+    "form": "portal.tasks",
+    "guid": "7ba3e978-13cd-4f85-8ce6-34cfdd1d0d89",
+    "order": 7
+  },
+  {
+    "caption": "СЭД",
+    "path": "Portal",
+    "icon": "date",
+    "form": "portal.sed",
+    "guid": "7bc7c59d-c1e7-44de-a7c8-ed4e82f2002e",
+    "order": 8
+  },
+  {
+    "caption": "Отсутствия",
+    "path": "Portal",
+    "icon": "date",
+    "form": "portal.absences",
+    "guid": "cf426198-86f8-4093-bf58-46bd70227ca3",
+    "order": 9
+  },
+  {
+    "caption": "Проекты",
+    "path": "Portal",
+    "icon": "date",
+    "form": "portal.projects",
+    "guid": "3f4ce6ab-bfdb-4787-8eeb-9550cb9f3f9c",
+    "order": 10
+  },
+  {
+    "caption": "Проект (карточка)",
+    "path": "Portal",
+    "icon": "date",
+    "form": "portal.project_detail",
+    "guid": "8f496274-f3d9-4038-88df-08ca1ca13a93",
+    "order": 11
+  },
+  {
+    "caption": "Продукты",
+    "path": "Portal",
+    "icon": "date",
+    "form": "portal.products",
+    "guid": "ff923fcd-427a-4d8b-a5f8-4a24c907f995",
+    "order": 12
+  },
+  {
+    "caption": "Продукт (карточка)",
+    "path": "Portal",
+    "icon": "date",
+    "form": "portal.product_detail",
+    "guid": "f2934a7e-ebd3-43d2-8b11-b7315a11a41f",
+    "order": 13
+  },
+  {
+    "caption": "База знаний",
+    "path": "Portal",
+    "icon": "date",
+    "form": "portal.knowledge",
+    "guid": "b212f0f2-bbf7-4f70-aa1e-afe55dc8f7bb",
+    "order": 14
+  },
+  {
+    "caption": "Документ БЗ (карточка)",
+    "path": "Portal",
+    "icon": "date",
+    "form": "portal.knowledge_detail",
+    "guid": "f60f6dea-c8aa-4835-84c8-7f58cfd28ec2",
+    "order": 15
+  },
+  {
+    "caption": "Новости",
+    "path": "Portal",
+    "icon": "date",
+    "form": "portal.news",
+    "guid": "ebecc2ee-c0f9-4f65-b57d-57f54be29d0b",
+    "order": 16
+  },
+  {
+    "caption": "Новость (карточка)",
+    "path": "Portal",
+    "icon": "date",
+    "form": "portal.news_detail",
+    "guid": "9cb9a8c1-b79e-4d15-a6b8-871918458f53",
+    "order": 17
+  },
+  {
+    "caption": "Организация",
+    "path": "Portal",
+    "icon": "date",
+    "form": "portal.organization",
+    "guid": "d18e5675-881d-4380-8ab7-01457a2ddf65",
+    "order": 18
+  },
+  {
+    "caption": "Роли",
+    "path": "Portal",
+    "icon": "date",
+    "form": "portal.roles",
+    "guid": "f2e3e0b3-80ca-4310-a28c-53eea06f2c05",
+    "order": 19
+  },
+  {
+    "caption": "Настройки",
+    "path": "Portal",
+    "icon": "date",
+    "form": "portal.settings",
+    "guid": "95ea9683-f6e6-4ce6-ae5d-ecad1d36f373",
+    "order": 20
+  }
+]

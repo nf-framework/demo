@@ -1,0 +1,8 @@
+{
+  "name": "portal",
+  "version": "1.0.0",
+  "description": "Portal module with in-memory forms on pl-components",
+  "license": "ISC",
+  "author": "Codex",
+  "type": "module"
+}

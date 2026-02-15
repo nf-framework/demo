@@ -1,0 +1,271 @@
+{
+    "schema": "generated",
+    "tablename": "table_master",
+    "comment": null,
+    "cols": [
+        {
+            "name": "id",
+            "datatype": "int8",
+            "datatype_length": null,
+            "datatype_full": "bigint",
+            "required": true,
+            "default_value": "nextval('generated.s4table_master'::text::regclass)",
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 1
+        },
+        {
+            "name": "team_id",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 2
+        },
+        {
+            "name": "team_name",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 3
+        },
+        {
+            "name": "manager",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 4
+        },
+        {
+            "name": "direction",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 5
+        },
+        {
+            "name": "status",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 6
+        },
+        {
+            "name": "current_sprint",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 7
+        },
+        {
+            "name": "velocity",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 8
+        },
+        {
+            "name": "tech_debt_pct",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 9
+        },
+        {
+            "name": "vacation_load_pct",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 10
+        },
+        {
+            "name": "capacity_pct",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 11
+        },
+        {
+            "name": "next_milestone",
+            "datatype": "text",
+            "datatype_length": null,
+            "datatype_full": "text",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 12
+        },
+        {
+            "name": "open_tasks",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 13
+        },
+        {
+            "name": "in_progress_tasks",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 14
+        },
+        {
+            "name": "done_tasks",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 15
+        },
+        {
+            "name": "sla_violations",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 16
+        },
+        {
+            "name": "incident_rate",
+            "datatype": "numeric",
+            "datatype_length": "8,2",
+            "datatype_full": "numeric(8,2)",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 17
+        },
+        {
+            "name": "oncall_count",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 18
+        },
+        {
+            "name": "deploy_frequency",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 19
+        },
+        {
+            "name": "cycle_time_days",
+            "datatype": "int4",
+            "datatype_length": null,
+            "datatype_full": "integer",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 20
+        },
+        {
+            "name": "last_release",
+            "datatype": "date",
+            "datatype_length": null,
+            "datatype_full": "date",
+            "required": true,
+            "default_value": null,
+            "comment": null,
+            "fk_tablename": null,
+            "column_id": 21
+        }
+    ],
+    "cons": [
+        {
+            "name": "table_master_pkey",
+            "schema": "generated",
+            "type": "p",
+            "update_rule": null,
+            "delete_rule": null,
+            "condition": null,
+            "definition": "PRIMARY KEY (id)",
+            "r_schema": null,
+            "r_tablename": null,
+            "r_columnname": null,
+            "columns": "id",
+            "comment": null,
+            "deferrable": null
+        },
+        {
+            "name": "table_master_team_id_key",
+            "schema": "generated",
+            "type": "u",
+            "update_rule": null,
+            "delete_rule": null,
+            "condition": null,
+            "definition": "UNIQUE (team_id)",
+            "r_schema": null,
+            "r_tablename": null,
+            "r_columnname": null,
+            "columns": "team_id",
+            "comment": null,
+            "deferrable": null
+        }
+    ],
+    "indx": null
+}

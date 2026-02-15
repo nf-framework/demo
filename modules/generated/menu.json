@@ -22,6 +22,14 @@
     "order": 0
   },
   {
+    "caption": "Dashboard 2",
+    "path": "Generated",
+    "icon": "home",
+    "form": "dashboard_2",
+    "guid": "1f501a85-f5fd-4685-aeaf-ec5fbc2ec987",
+    "order": 11
+  },
+  {
     "caption": "pl-table: Settings",
     "path": "Generated",
     "icon": "date",
@@ -52,5 +60,45 @@
     "form": "generated.table_group_deep",
     "guid": "a0ed59af-4c9a-45f4-a2e0-e1c2d4a55b10",
     "order": 5
+  },
+  {
+    "caption": "pl-table: Inline Edit",
+    "path": "Generated",
+    "icon": "date",
+    "form": "generated.table_inline_edit",
+    "guid": "f69373cb-2d21-40ba-b18f-f6a8782b4004",
+    "order": 6
+  },
+  {
+    "caption": "pl-table: Multi Select",
+    "path": "Generated",
+    "icon": "date",
+    "form": "generated.table_multi_select",
+    "guid": "4d9448e6-a5f5-41f9-b5d7-38c13f0b8f7d",
+    "order": 7
+  },
+  {
+    "caption": "pl-table: Tree",
+    "path": "Generated",
+    "icon": "date",
+    "form": "generated.table_tree",
+    "guid": "8040e96d-b1df-4ca9-a4cc-fe2cb7e28d4d",
+    "order": 8
+  },
+  {
+    "caption": "pl-table: Features",
+    "path": "Generated",
+    "icon": "date",
+    "form": "generated.table_features",
+    "guid": "2d42f8f2-7046-4e8a-a3bc-4d0c50dce66b",
+    "order": 9
+  },
+  {
+    "caption": "pl-table: Load 10k x 50",
+    "path": "Generated",
+    "icon": "date",
+    "form": "generated.table_load_10000",
+    "guid": "2f95b55b-3e5f-4941-9af7-08e47e5934fe",
+    "order": 10
   }
 ]
