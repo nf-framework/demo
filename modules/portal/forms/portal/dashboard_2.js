@@ -1659,8 +1659,7 @@ export default class GeneratedDashboard2 extends PlForm {
             <div class="task-grid-wrap">
               <pl-table-pro
                 data="{{tasks}}"
-                selected="{{selectedTask}}"
-                enable-settings="false">
+                selected="{{selectedTask}}">
                 <template is="extra styles">
                   <style>
                     .task-owner-cell {
@@ -1729,6 +1728,8 @@ export default class GeneratedDashboard2 extends PlForm {
                     }
                   </style>
                 </template>
+                <pl-flex-layout slot="top-toolbar" align="center">
+                </pl-flex-layout>
                 <pl-table-pro-column id="title" field="title" header="Название" width="420"></pl-table-pro-column>
                 <pl-table-pro-column id="assignee" field="assignee" header="Исполнитель" width="190">
                   <template>

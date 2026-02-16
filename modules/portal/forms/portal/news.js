@@ -77,7 +77,8 @@ export default class PortalNewsForm extends PortalBaseListForm {
     },
     {
         label: "Контент",
-        field: "bodyHtml"
+        field: "bodyHtml",
+        type: "html"
     }
 ];
   }

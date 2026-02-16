@@ -142,7 +142,7 @@ export default class GeneratedTableFeatures extends PlForm {
         <pl-table-pro-column id="environment" field="environment" header="Среда" width="105" cell-align="center" sortable resizable></pl-table-pro-column>
         <pl-table-pro-column id="severity" field="severity" header="Критичность" width="120" cell-align="center" sortable resizable sort="asc"></pl-table-pro-column>
         <pl-table-pro-column id="status" field="status" header="Статус" width="140" cell-align="center" cell-valign="middle" sortable resizable></pl-table-pro-column>
-        <pl-table-pro-column id="owner_name" field="owner_name" header="Ответственный" width="170" sortable resizable></pl-table-pro-column>
+        <pl-table-pro-column id="owner_name" field="owner_name" header="Ответственный" sortable resizable></pl-table-pro-column>
         <pl-table-pro-column id="squad" field="squad" header="Подразделение" width="170" sortable resizable></pl-table-pro-column>
         <pl-table-pro-column id="plan_hours" field="plan_hours" header="План, ч" align="right" width="105" sortable resizable>
           <template is="footer">[[footNumericValue(summary.plan_hours)]]</template>

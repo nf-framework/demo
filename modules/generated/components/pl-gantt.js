@@ -53,6 +53,7 @@ class PlGantt extends PlElement {
     data: { type: Array, value: () => [], observer: '_queueRender' },
     dayWidth: { type: Number, value: 28, observer: '_queueRender' },
     sideWidth: { type: Number, value: 280, observer: '_queueRender' },
+    minTimelineWidth: { type: Number, value: 960, observer: '_queueRender' },
     startField: { type: String, value: 'start', observer: '_queueRender' },
     endField: { type: String, value: 'end', observer: '_queueRender' },
     titleField: { type: String, value: 'title', observer: '_queueRender' },
@@ -682,19 +683,26 @@ class PlGantt extends PlElement {
   constructor() {
     super();
     this._renderRaf = 0;
+    this._resizeObserver = null;
+    this._lastHostWidth = 0;
+    this._lastHostHeight = 0;
     this._bound = {
-      onClick: this._onRootClick.bind(this)
+      onClick: this._onRootClick.bind(this),
+      onResize: this._onResize.bind(this)
     };
   }
 
   connectedCallback() {
     super.connectedCallback();
     this.$?.scroller?.addEventListener('click', this._bound.onClick);
+    this._observeResize();
     this._queueRender();
   }
 
   disconnectedCallback() {
     this.$?.scroller?.removeEventListener('click', this._bound.onClick);
+    this._resizeObserver?.disconnect?.();
+    this._resizeObserver = null;
     if (this._renderRaf) {
       cancelAnimationFrame(this._renderRaf);
       this._renderRaf = 0;
@@ -709,6 +717,23 @@ class PlGantt extends PlElement {
       this._renderRaf = 0;
       this._render();
     });
+  }
+
+  _observeResize() {
+    if (typeof ResizeObserver === 'undefined' || this._resizeObserver) return;
+    this._resizeObserver = new ResizeObserver(this._bound.onResize);
+    this._resizeObserver.observe(this);
+  }
+
+  _onResize(entries) {
+    if (!Array.isArray(entries) || entries.length === 0) return;
+    const entry = entries[0];
+    const width = Math.round(entry?.contentRect?.width || this.clientWidth || 0);
+    const height = Math.round(entry?.contentRect?.height || this.clientHeight || 0);
+    if (width === this._lastHostWidth && height === this._lastHostHeight) return;
+    this._lastHostWidth = width;
+    this._lastHostHeight = height;
+    this._queueRender();
   }
 
   _onRootClick(event) {
@@ -947,11 +972,16 @@ class PlGantt extends PlElement {
 
     const baseDayWidth = Math.max(20, Number(this.dayWidth) || 28);
     const sideWidth = Math.max(180, Number(this.sideWidth) || 280);
+    const minTimelineWidth = Math.max(360, Number(this.minTimelineWidth) || 960);
     let dayWidth = baseDayWidth;
     if (segmentMode) {
       const availableWidth = Math.max(0, (root.clientWidth || 0) - sideWidth);
       const fitWidth = days.length ? Math.floor(availableWidth / days.length) : baseDayWidth;
       dayWidth = Math.max(baseDayWidth, fitWidth);
+    }
+    if (days.length > 0) {
+      const minDayWidthByTimeline = Math.ceil(minTimelineWidth / days.length);
+      dayWidth = Math.max(dayWidth, minDayWidthByTimeline);
     }
     const timelineWidth = days.length * dayWidth;
     const ticksHtml = days.map(() => `<span class="tick"></span>`).join('');

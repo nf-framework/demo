@@ -24,7 +24,7 @@ export default class PortalNewsDetailForm extends PortalBaseDetailForm {
       { label: 'Опубликовано', field: 'publishedAtRu' },
       { label: 'Аудитория', field: 'audience.type' },
       { label: 'Теги', field: 'tags' },
-      { label: 'Контент', field: 'bodyHtml' }
+      { label: 'Контент', field: 'bodyHtml', type: 'html' }
     ];
   }
 

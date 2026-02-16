@@ -123,7 +123,10 @@ export default class GeneratedTableLoad10000 extends PlForm {
           columns="{{columns}}"
           data="{{data}}"
           selected="{{selected}}"
-          settings-key="generated.table_pro.table_load_10000"></pl-table-pro>
+          settings-key="generated.table_pro.table_load_10000">
+          <pl-flex-layout slot="top-toolbar" align="center">
+          </pl-flex-layout>
+        </pl-table-pro>
       </div>
     </pl-flex-layout>
 

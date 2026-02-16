@@ -144,6 +144,7 @@ export default class PortalEmployeeDetailForm extends PlForm {
     this.onManagerClick = this.onManagerClick.bind(this);
     this.onColleagueClick = this.onColleagueClick.bind(this);
     this.onOpenDepartmentClick = this.onOpenDepartmentClick.bind(this);
+    this.onDocumentClick = this.onDocumentClick.bind(this);
   }
 
   static css = css`
@@ -320,6 +321,13 @@ export default class PortalEmployeeDetailForm extends PlForm {
 
     .hero-actions pl-button {
       min-width: 128px;
+    }
+
+    .hero-actions .edit-btn {
+      width: auto;
+      margin-top: 0;
+      margin-inline-start: auto;
+      min-width: 132px;
     }
 
     .chips-row {
@@ -1194,7 +1202,7 @@ export default class PortalEmployeeDetailForm extends PlForm {
 
     .hero {
       padding: 12px;
-      grid-template-columns: minmax(0, 1fr) 200px;
+      grid-template-columns: 1fr;
       gap: 12px;
     }
 
@@ -1230,6 +1238,13 @@ export default class PortalEmployeeDetailForm extends PlForm {
       gap: 12px;
       font-size: 14px;
       color: var(--pl-grey-darkest);
+    }
+
+    .hero-kpis {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(150px, 220px));
+      gap: 8px;
+      align-items: stretch;
     }
 
     .employee-tabnum {
@@ -1274,10 +1289,6 @@ export default class PortalEmployeeDetailForm extends PlForm {
       color: var(--pl-header-color);
     }
 
-    .hero-side {
-      gap: 6px;
-    }
-
     .kpi-card {
       border-color: var(--pl-grey-base);
       border-radius: var(--pl-border-radius);
@@ -1306,13 +1317,17 @@ export default class PortalEmployeeDetailForm extends PlForm {
     }
 
     .main-grid {
-      grid-template-columns: minmax(0, 1.35fr) minmax(280px, 1fr);
+      grid-template-columns: minmax(0, 1.4fr) minmax(300px, 1fr);
       gap: 8px;
     }
 
     .main-column,
     .side-column {
       gap: 8px;
+    }
+
+    .side-column .section-body {
+      padding: 8px;
     }
 
     .panel-head {
@@ -1330,6 +1345,10 @@ export default class PortalEmployeeDetailForm extends PlForm {
       line-height: 1.2;
       color: var(--pl-header-color);
       font-weight: 700;
+    }
+
+    .side-column .panel-title {
+      font-size: 20px;
     }
 
     .inner-title {
@@ -1373,11 +1392,25 @@ export default class PortalEmployeeDetailForm extends PlForm {
     }
 
     .skill-chip {
+      position: relative;
       min-height: 24px;
       font-size: 12px;
+      padding: 0 10px 0 16px;
       border-color: var(--pl-grey-base);
       background: var(--pl-grey-lightest);
       color: var(--pl-header-color);
+    }
+
+    .skill-chip::before {
+      content: '#';
+      position: absolute;
+      left: 7px;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.85;
+      font-weight: 700;
+      font-size: 11px;
+      line-height: 1;
     }
 
     .skill-chip.skill-grade {
@@ -1420,10 +1453,23 @@ export default class PortalEmployeeDetailForm extends PlForm {
       border-color: var(--pl-grey-base);
       border-radius: var(--pl-border-radius);
       background: var(--pl-background-color);
-      grid-template-columns: 44px minmax(0, 1fr);
+      grid-template-columns: 44px minmax(0, 1fr) auto;
       padding: 8px;
       gap: 8px;
       min-height: 60px;
+    }
+
+    .colleague-main {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2px;
+    }
+
+    .colleague-card pl-button {
+      align-self: center;
+      min-width: 78px;
     }
 
     .colleague-card .person-name {
@@ -1489,6 +1535,7 @@ export default class PortalEmployeeDetailForm extends PlForm {
 
     .doc-link {
       font-size: 14px;
+      text-align: left;
     }
 
     .award-year {
@@ -1629,6 +1676,21 @@ export default class PortalEmployeeDetailForm extends PlForm {
       z-index: 1;
     }
 
+    .timeline-dot.dot-approved {
+      background: #2b8b67;
+      box-shadow: 0 0 0 1px #8fd0b4;
+    }
+
+    .timeline-dot.dot-planned {
+      background: #3d78ce;
+      box-shadow: 0 0 0 1px #a9c4f4;
+    }
+
+    .timeline-dot.dot-rejected {
+      background: #bb4a4a;
+      box-shadow: 0 0 0 1px #f0b2b2;
+    }
+
     .timeline-line {
       position: absolute;
       top: 14px;
@@ -1668,6 +1730,70 @@ export default class PortalEmployeeDetailForm extends PlForm {
 
     .timeline-content {
       min-width: 0;
+      border: 1px solid var(--pl-grey-base);
+      border-radius: var(--pl-border-radius);
+      background: var(--pl-background-color);
+      padding: 8px 10px;
+      box-sizing: border-box;
+    }
+
+    .timeline-head {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+
+    .timeline-actor {
+      font: var(--pl-header-font);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--pl-header-color);
+      line-height: 1.2;
+    }
+
+    .timeline-type {
+      display: inline-flex;
+      align-items: center;
+      min-height: 20px;
+      border-radius: 999px;
+      border: 1px solid var(--pl-grey-base);
+      background: var(--pl-grey-lightest);
+      color: var(--pl-header-color);
+      font: var(--pl-text-font);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 0 8px;
+      box-sizing: border-box;
+      line-height: 1;
+    }
+
+    .timeline-type.type-absence {
+      border-color: #f1cf8a;
+      background: #fff4df;
+      color: #8a651a;
+    }
+
+    .timeline-type.type-document {
+      border-color: #9ac8bb;
+      background: #ecf7f3;
+      color: #20634f;
+    }
+
+    .timeline-type.type-audit {
+      border-color: #a9c4f4;
+      background: #edf3ff;
+      color: #2f5fa5;
+    }
+
+    .timeline-relative {
+      margin-inline-start: auto;
+      color: var(--pl-grey-darkest);
+      font: var(--pl-text-font);
+      font-size: 11px;
+      line-height: 1.2;
+      white-space: nowrap;
     }
 
     .timeline-text {
@@ -1678,24 +1804,36 @@ export default class PortalEmployeeDetailForm extends PlForm {
       padding-top: 1px;
     }
 
+    .timeline-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+
+    .timeline-meta-chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 22px;
+      border-radius: 999px;
+      border: 1px solid var(--pl-grey-base);
+      background: var(--pl-grey-lightest);
+      color: var(--pl-grey-darkest);
+      font: var(--pl-text-font);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 0 8px;
+      box-sizing: border-box;
+      line-height: 1;
+    }
+
     .assignment-kpi {
       font-size: 14px;
       color: var(--pl-header-color);
     }
 
     @media (max-width: 1260px) {
-      .hero {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-side {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
-      .edit-btn {
-        grid-column: span 3;
-      }
-
       .main-grid {
         grid-template-columns: 1fr;
       }
@@ -1731,12 +1869,8 @@ export default class PortalEmployeeDetailForm extends PlForm {
         grid-template-columns: 1fr;
       }
 
-      .hero-side {
-        grid-template-columns: 1fr;
-      }
-
-      .edit-btn {
-        grid-column: auto;
+      .hero-kpis {
+        grid-template-columns: 1fr 1fr;
       }
 
       .panel-title {
@@ -1772,6 +1906,14 @@ export default class PortalEmployeeDetailForm extends PlForm {
         align-items: flex-start;
       }
 
+      .colleague-card {
+        grid-template-columns: 40px minmax(0, 1fr);
+      }
+
+      .colleague-card pl-button {
+        display: none;
+      }
+
       .timeline-day {
         margin-inline-start: 68px;
       }
@@ -1797,6 +1939,28 @@ export default class PortalEmployeeDetailForm extends PlForm {
       .timeline-text {
         font-size: 13px;
       }
+
+      .timeline-content {
+        padding: 7px 8px;
+      }
+
+      .timeline-actor {
+        font-size: 12px;
+      }
+
+      .timeline-type {
+        font-size: 10px;
+      }
+
+      .timeline-relative {
+        width: 100%;
+        margin-inline-start: 0;
+        font-size: 10px;
+      }
+
+      .timeline-meta-chip {
+        font-size: 11px;
+      }
     }
   `;
 
@@ -1821,6 +1985,17 @@ export default class PortalEmployeeDetailForm extends PlForm {
                 <span>✉ [[selectedEmployee.contacts.email]]</span>
               </div>
 
+              <div class="hero-kpis">
+                <div class="kpi-card">
+                  <div class="kpi-label">Стаж в компании</div>
+                  <div class="kpi-value">[[tenureValue(selectedEmployee.hireDate)]]</div>
+                </div>
+                <div class="kpi-card">
+                  <div class="kpi-label">Грейд</div>
+                  <div class="kpi-value">[[selectedEmployee.grade]]</div>
+                </div>
+              </div>
+
               <div class="employee-facts">
                 <template d:repeat="[[employeeFacts]]">
                   <div class="fact-card">
@@ -1834,6 +2009,7 @@ export default class PortalEmployeeDetailForm extends PlForm {
                 <pl-button label="Позвонить" variant="secondary"></pl-button>
                 <pl-button label="Написать" variant="secondary"></pl-button>
                 <pl-button label="Открыть отдел" variant="secondary" on-click="[[onOpenDepartmentClick]]"></pl-button>
+                <pl-button class="edit-btn" label="Редактировать" variant="secondary"></pl-button>
               </pl-flex-layout>
 
               <div class="chips-row">
@@ -1842,24 +2018,14 @@ export default class PortalEmployeeDetailForm extends PlForm {
               </div>
             </div>
           </div>
-
-          <aside class="hero-side">
-            <div class="kpi-card">
-              <div class="kpi-label">Стаж в компании</div>
-              <div class="kpi-value">[[tenureValue(selectedEmployee.hireDate)]]</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-label">Грейд</div>
-              <div class="kpi-value">[[selectedEmployee.grade]]</div>
-            </div>
-            <pl-button class="edit-btn" label="Редактировать" variant="secondary"></pl-button>
-          </aside>
         </section>
 
         <section class="panel tabs-panel">
           <pl-flex-layout class="tabs-row">
             <pl-button variant="link" class="[[tabButtonClass(activeTab, 'main')]]" label="Основное" data-tab="main" on-click="[[onTabClick]]"></pl-button>
             <pl-button variant="link" class="[[tabButtonClass(activeTab, 'projects')]]" label="Проекты" data-tab="projects" on-click="[[onTabClick]]"></pl-button>
+            <pl-button variant="link" class="[[tabButtonClass(activeTab, 'salary')]]" label="Квитки" data-tab="salary" on-click="[[onTabClick]]"></pl-button>
+            <pl-button variant="link" class="[[tabButtonClass(activeTab, 'equipment')]]" label="Техника" data-tab="equipment" on-click="[[onTabClick]]"></pl-button>
             <pl-button variant="link" class="[[tabButtonClass(activeTab, 'absences')]]" label="Отсутствия" data-tab="absences" on-click="[[onTabClick]]"></pl-button>
             <pl-button variant="link" class="[[tabButtonClass(activeTab, 'history')]]" label="История" data-tab="history" on-click="[[onTabClick]]"></pl-button>
           </pl-flex-layout>
@@ -1881,7 +2047,7 @@ export default class PortalEmployeeDetailForm extends PlForm {
                       <p class="person-title">[[manager.title]]</p>
                       <div class="person-contacts">[[manager.contacts.phone]] · [[manager.contacts.email]]</div>
                     </div>
-                    <pl-button variant="link" label="Профиль"></pl-button>
+                    <pl-button variant="link" label="Профиль" on-click="[[onManagerClick]]" data-employee-id$="[[manager.id]]"></pl-button>
                   </div>
                 </div>
               </section>
@@ -1907,29 +2073,12 @@ export default class PortalEmployeeDetailForm extends PlForm {
               </section>
 
               <section class="panel">
-                <div class="panel-head"><h2 class="panel-title">Зарплатные квитки</h2></div>
-                <div class="section-body">
-                  <template d:repeat="[[salaryRows]]">
-                    <div class="salary-card">
-                      <div class="salary-month">[[item.monthLabel]]</div>
-                      <div class="salary-file">[[item.fileName]]</div>
-                      <div class="salary-grid">
-                        <div class="salary-item">Начислено:<strong>[[item.gross]] ₽</strong></div>
-                        <div class="salary-item">НДФЛ:<strong>[[item.tax]] ₽</strong></div>
-                        <div class="salary-item">К выплате:<strong>[[item.net]] ₽</strong></div>
-                      </div>
-                    </div>
-                  </template>
-                </div>
-              </section>
-
-              <section class="panel">
                 <div class="panel-head"><h2 class="panel-title">Документы</h2></div>
                 <div class="section-body">
                   <ul class="docs-list">
                     <template d:repeat="[[docsRows]]">
                       <li class="doc-item">
-                        <pl-button variant="link" class="doc-link" label="[[item.title]]"></pl-button>
+                        <pl-button variant="link" class="doc-link" label="[[item.title]]" on-click="[[onDocumentClick]]" data-doc-id$="[[item.id]]"></pl-button>
                       </li>
                     </template>
                   </ul>
@@ -1949,24 +2098,6 @@ export default class PortalEmployeeDetailForm extends PlForm {
                 </div>
               </section>
 
-              <section class="panel">
-                <div class="panel-head"><h2 class="panel-title">Выданная техника</h2></div>
-                <div class="section-body">
-                  <template d:repeat="[[assetsRows]]">
-                    <div class="asset-row">
-                      <div>
-                        <p class="asset-name">[[item.name]]</p>
-                        <div class="asset-meta">[[item.meta]]</div>
-                      </div>
-                      <div class="asset-right">
-                        <div class="asset-date">[[item.assignedOn]]</div>
-                        <div class="asset-state">[[item.state]]</div>
-                      </div>
-                    </div>
-                  </template>
-                </div>
-              </section>
-
             </div>
 
             <div class="side-column">
@@ -1977,10 +2108,11 @@ export default class PortalEmployeeDetailForm extends PlForm {
                     <template d:repeat="[[colleagues]]">
                       <div class="colleague-card row-link" data-employee-id="[[item.id]]" data-employee-id$="[[item.id]]" on-click="[[onColleagueClick]]">
                         <div class="person-avatar"><img src$="[[item.photoUrl]]" alt$="[[item.displayName]]"></div>
-                        <div>
+                        <div class="colleague-main">
                           <p class="person-name">[[item.displayName]]</p>
                           <p class="person-title">[[item.title]]</p>
                         </div>
+                        <pl-button variant="link" label="Профиль" on-click="[[onColleagueClick]]" data-employee-id$="[[item.id]]"></pl-button>
                       </div>
                     </template>
                   </div>
@@ -2037,6 +2169,45 @@ export default class PortalEmployeeDetailForm extends PlForm {
           </section>
         </div>
 
+        <div class="[[tabPanelClass(activeTab, 'salary')]]">
+          <section class="panel">
+            <div class="panel-head"><h2 class="inner-title">Зарплатные квитки</h2></div>
+            <div class="section-body">
+              <template d:repeat="[[salaryRows]]">
+                <div class="salary-card">
+                  <div class="salary-month">[[item.monthLabel]]</div>
+                  <div class="salary-file">[[item.fileName]]</div>
+                  <div class="salary-grid">
+                    <div class="salary-item">Начислено:<strong>[[item.gross]] ₽</strong></div>
+                    <div class="salary-item">НДФЛ:<strong>[[item.tax]] ₽</strong></div>
+                    <div class="salary-item">К выплате:<strong>[[item.net]] ₽</strong></div>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </section>
+        </div>
+
+        <div class="[[tabPanelClass(activeTab, 'equipment')]]">
+          <section class="panel">
+            <div class="panel-head"><h2 class="inner-title">Выданная техника</h2></div>
+            <div class="section-body">
+              <template d:repeat="[[assetsRows]]">
+                <div class="asset-row">
+                  <div>
+                    <p class="asset-name">[[item.name]]</p>
+                    <div class="asset-meta">[[item.meta]]</div>
+                  </div>
+                  <div class="asset-right">
+                    <div class="asset-date">[[item.assignedOn]]</div>
+                    <div class="asset-state">[[item.state]]</div>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </section>
+        </div>
+
         <div class="[[tabPanelClass(activeTab, 'absences')]]">
           <section class="panel">
             <div class="panel-head"><h2 class="inner-title">Отсутствия и режимы работы</h2></div>
@@ -2073,14 +2244,22 @@ export default class PortalEmployeeDetailForm extends PlForm {
                     <p class="[[timelineDayClass(item.showDay)]]">[[item.dayLabel]]</p>
                     <div class="timeline-row">
                       <div class="timeline-axis">
-                        <span class="timeline-dot"></span>
+                        <span class="[[timelineDotClass(item)]]"></span>
                         <span class="[[timelineLineClass(item.isLast)]]"></span>
                       </div>
                       <div class="timeline-time">[[historyTimeLabel(item.timestamp)]]</div>
                       <div class="timeline-avatar"><img src$="[[item.actorPhoto]]" alt$="[[item.actorName]]"></div>
                       <div class="timeline-content">
+                        <div class="timeline-head">
+                          <span class="timeline-actor">[[item.actorName]]</span>
+                          <span class="[[timelineTypeClass(item.eventType)]]">[[item.eventLabel]]</span>
+                          <span class="timeline-relative">[[relativeTimeLabel(item.timestamp)]]</span>
+                        </div>
                         <div class="timeline-text">[[item.text]]</div>
-                        <span class="[[historyBadgeClass(item.approvalStatus)]]">[[approvalLabel(item.approvalStatus)]]</span>
+                        <div class="timeline-meta">
+                          <span class="timeline-meta-chip">[[item.entityLabel]]</span>
+                          <span class="[[historyBadgeClass(item.approvalStatus)]]">[[approvalLabel(item.approvalStatus)]]</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -2118,8 +2297,8 @@ export default class PortalEmployeeDetailForm extends PlForm {
   }
 
   skillLabel(item) {
-    if (item && typeof item === 'object') return item.label || '';
-    return String(item || '');
+    const value = item && typeof item === 'object' ? (item.label || '') : String(item || '');
+    return value.replace(/^#/, '').trim();
   }
 
   skillChipClass(item) {
@@ -2215,6 +2394,28 @@ export default class PortalEmployeeDetailForm extends PlForm {
     return isLast ? 'timeline-line is-last' : 'timeline-line';
   }
 
+  timelineDotClass(item) {
+    const status = item?.approvalStatus || 'planned';
+    return `timeline-dot dot-${status}`;
+  }
+
+  timelineTypeClass(type) {
+    return `timeline-type type-${type || 'audit'}`;
+  }
+
+  relativeTimeLabel(value) {
+    const date = parseDate(value);
+    if (!date) return '';
+    const diffMs = Date.now() - date.getTime();
+    const minutes = Math.floor(diffMs / 60000);
+    if (minutes < 1) return 'только что';
+    if (minutes < 60) return `${minutes} мин назад`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours} ч назад`;
+    const days = Math.floor(hours / 24);
+    return `${days} дн назад`;
+  }
+
   onTabClick(event) {
     const tab = event?.currentTarget?.dataset?.tab || 'main';
     this.activeTab = tab;
@@ -2229,16 +2430,40 @@ export default class PortalEmployeeDetailForm extends PlForm {
     return target?.dataset?.employeeId || '';
   }
 
+  _resolveDocId(event) {
+    const modelId = event?.model?.item?.id || event?.detail?.item?.id || event?.detail?.id;
+    if (modelId) return modelId;
+    const currentId = event?.currentTarget?.dataset?.docId;
+    if (currentId) return currentId;
+    const target = event?.target?.closest?.('[data-doc-id]');
+    return target?.dataset?.docId || '';
+  }
+
   async onManagerClick(event) {
-    const id = this._resolveEmployeeId(event);
+    event?.stopPropagation?.();
+    const id = this._resolveEmployeeId(event) || this.manager?.id;
     if (!id || id === this.selectedId) return;
     await this.open('portal.employee_detail', { selectedId: id });
   }
 
   async onColleagueClick(event) {
-    const id = this._resolveEmployeeId(event);
+    event?.stopPropagation?.();
+    const id = this._resolveEmployeeId(event) || event?.model?.item?.id;
     if (!id || id === this.selectedId) return;
     await this.open('portal.employee_detail', { selectedId: id });
+  }
+
+  async onDocumentClick(event) {
+    event?.stopPropagation?.();
+    const id = this._resolveDocId(event);
+    const row = (this.docsRows || []).find((item) => item.id === id) || event?.model?.item;
+    if (!row?.id) return;
+
+    if (String(row.id).startsWith('doc-')) {
+      await this.open('portal.sed', { search: row.title || '' });
+      return;
+    }
+    this.notify(`Демо-файл: ${row.title || 'Документ'}`, { type: 'success', header: 'Файл' });
   }
 
   async onOpenDepartmentClick() {
@@ -2574,6 +2799,22 @@ export default class PortalEmployeeDetailForm extends PlForm {
   }
 
   _buildHistory(employee) {
+    const actionLabel = (action) => {
+      if (action === 'create') return 'Создание';
+      if (action === 'update') return 'Изменение';
+      if (action === 'delete') return 'Удаление';
+      return 'Событие';
+    };
+    const entityLabel = (entityType) => {
+      if (entityType === 'employee') return 'Карточка сотрудника';
+      if (entityType === 'assignment') return 'Назначения';
+      if (entityType === 'documents') return 'Документооборот';
+      if (entityType === 'tasks') return 'Задачи';
+      if (entityType === 'project') return 'Проекты';
+      if (entityType === 'knowledgeBase') return 'База знаний';
+      return String(entityType || 'Система');
+    };
+
     const absRows = (portalData.absences || [])
       .filter((item) => item.employeeId === employee.id)
       .map((item, idx) => ({
@@ -2582,8 +2823,11 @@ export default class PortalEmployeeDetailForm extends PlForm {
         actorId: employee.id,
         actorName: employee.displayName,
         actorPhoto: employee.photoUrl,
-        text: `${employee.displayName} оформил отсутствие ${ABSENCE_LABELS[item.type] || item.type}`,
-        approvalStatus: item.approvalStatus || 'planned'
+        text: `${ABSENCE_LABELS[item.type] || item.type}: ${fmtDate(item.startDate)} — ${fmtDate(item.endDate)}`,
+        approvalStatus: item.approvalStatus || 'planned',
+        eventType: 'absence',
+        eventLabel: 'Отсутствие',
+        entityLabel: ABSENCE_LABELS[item.type] || item.type
       }));
 
     const auditRows = (portalData.auditLog || [])
@@ -2591,16 +2835,17 @@ export default class PortalEmployeeDetailForm extends PlForm {
       .map((item) => {
         const actorName = employeeName(item.actorId) || employee.displayName;
         const actor = pickEmployee(item.actorId) || employee;
-        const entity = item.entityType === 'employee' ? 'карточки сотрудника' : item.entityType;
-
         return {
           id: item.id,
           timestamp: item.timestamp,
           actorId: item.actorId,
           actorName,
           actorPhoto: actor.photoUrl || employee.photoUrl,
-          text: `${actorName} выполнил действие ${item.action} для ${entity}`,
-          approvalStatus: item.action === 'update' ? 'approved' : 'planned'
+          text: `${actionLabel(item.action)} записи "${item.entityId}"`,
+          approvalStatus: item.action === 'delete' ? 'rejected' : item.action === 'update' ? 'approved' : 'planned',
+          eventType: 'audit',
+          eventLabel: actionLabel(item.action),
+          entityLabel: entityLabel(item.entityType)
         };
       });
 
@@ -2613,8 +2858,11 @@ export default class PortalEmployeeDetailForm extends PlForm {
         actorId: employee.id,
         actorName: employee.displayName,
         actorPhoto: employee.photoUrl,
-        text: `${employee.displayName} обработал документ ${doc.title}`,
-        approvalStatus: doc.status === 'approved' ? 'approved' : 'planned'
+        text: `${doc.title} (${doc.regNumber || 'без номера'})`,
+        approvalStatus: doc.status === 'approved' ? 'approved' : 'planned',
+        eventType: 'document',
+        eventLabel: 'Документ',
+        entityLabel: doc.type || 'Документооборот'
       }));
 
     return [...absRows, ...auditRows, ...documentRows]

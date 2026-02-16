@@ -109,8 +109,8 @@ export default class GeneratedTableTree extends PlForm {
         <pl-flex-layout slot="top-toolbar" wrap gap="8" align="center">
           <pl-icon-button variant="ghost" iconset="pl-default" icon="reload" on-click="[[onReloadClick]]"></pl-icon-button>
           <pl-badge>Источник: таблица generated.table_tree</pl-badge>
-          <pl-badge>Модель: id/pid, 5 уровней</pl-badge>
-          <pl-badge>Раскрытие узлов через pl-data-tree</pl-badge>
+          <pl-badge>Модель: 2 уровня, 200 родителей + 60 000 дочерних</pl-badge>
+          <pl-badge>Lazy partial: загрузка детей по раскрытию узла</pl-badge>
           <pl-badge>Загружено: [[dataRaw.length]]</pl-badge>
         </pl-flex-layout>
 
@@ -163,7 +163,8 @@ export default class GeneratedTableTree extends PlForm {
       hidValue: undefined,
       keyField: 'id',
       hidField: 'pid',
-      filterByHid: false
+      hasChildField: '_haschildren',
+      filterByHid: true
     };
   }
 

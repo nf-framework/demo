@@ -14,6 +14,7 @@ const menu = await api.loadJSON(`${__dirname}/menu.json`);
 const msgs = await api.loadJSON(`${__dirname}/msgs.json`);
 
 async function init() {
+  registerLibDir('d3');
   registerLibDir('portal/components');
   registerLibDir('portal/forms');
   await registerCustomElementsDir('portal/components', null, { recursive: true });

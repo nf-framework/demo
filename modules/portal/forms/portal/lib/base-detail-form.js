@@ -6,6 +6,7 @@ import '@plcmp/pl-input';
 import '@plcmp/pl-icon';
 import '@plcmp/pl-combobox';
 import '@plcmp/pl-badge';
+import { sanitizeRichHtml } from '/portal/forms/portal/lib/sanitize-html.js';
 
 export class PortalBaseDetailForm extends PlForm {
   static properties = {
@@ -130,6 +131,59 @@ export class PortalBaseDetailForm extends PlForm {
       word-break: break-word;
     }
 
+    .pair-value-html {
+      font-weight: 400;
+      white-space: normal;
+    }
+
+    .safe-html-content {
+      color: var(--pl-header-color);
+      font: var(--pl-text-font);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .safe-html-content h1,
+    .safe-html-content h2,
+    .safe-html-content h3,
+    .safe-html-content h4,
+    .safe-html-content h5,
+    .safe-html-content h6 {
+      margin: 10px 0 6px;
+      font: var(--pl-header-font);
+      color: var(--pl-header-color);
+      font-weight: 700;
+    }
+
+    .safe-html-content p,
+    .safe-html-content ul,
+    .safe-html-content ol,
+    .safe-html-content blockquote {
+      margin: 8px 0;
+    }
+
+    .safe-html-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0;
+      table-layout: fixed;
+    }
+
+    .safe-html-content th,
+    .safe-html-content td {
+      border: 1px solid var(--pl-grey-base);
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .safe-html-content a {
+      color: var(--pl-primary-base);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      word-break: break-all;
+    }
+
     .related {
       flex: 1;
       min-width: 0;
@@ -206,7 +260,10 @@ export class PortalBaseDetailForm extends PlForm {
             <template d:repeat="[[detailPairs]]">
               <div class="pair">
                 <div class="pair-label">[[item.label]]</div>
-                <div class="pair-value">[[item.value]]</div>
+                <div class="pair-value" hidden$="[[_hideTextValue(item)]]">[[item.value]]</div>
+                <div class="pair-value pair-value-html" hidden$="[[_hideHtmlValue(item)]]">
+                  <div class="safe-html-content" inner-h-t-m-l="[[item.htmlValue]]"></div>
+                </div>
               </div>
             </template>
           </div>
@@ -217,7 +274,10 @@ export class PortalBaseDetailForm extends PlForm {
             <div class="related-title">[[relatedTitle]]</div>
             <pl-badge>[[relatedRows.length]]</pl-badge>
           </div>
-          <pl-table-pro data="{{relatedRows}}" columns="[[relatedColumns]]" settings-key="[[settingsKey]]"></pl-table-pro>
+          <pl-table-pro data="{{relatedRows}}" columns="[[relatedColumns]]" settings-key="[[settingsKey]]">
+            <pl-flex-layout slot="top-toolbar" align="center">
+            </pl-flex-layout>
+          </pl-table-pro>
         </div>
       </pl-flex-layout>
     </pl-flex-layout>
@@ -269,17 +329,45 @@ export class PortalBaseDetailForm extends PlForm {
     this.relatedRows = this.getRelatedRows(row);
 
     const pairs = (this.getDetailFields() || [])
-      .map((field) => ({
-        label: field.label,
-        value: this._resolveValue(row, field.field)
-      }))
+      .map((field) => {
+        const isHtml = field?.type === 'html';
+        const rawValue = this._resolveRawValue(row, field?.field);
+        const value = this._resolveValue(row, field?.field);
+        if (!isHtml) {
+          return {
+            label: field?.label,
+            value,
+            isHtml: false
+          };
+        }
+
+        const htmlValue = sanitizeRichHtml(rawValue);
+        return {
+          label: field?.label,
+          value,
+          isHtml: true,
+          htmlValue
+        };
+      })
       .filter((pair) => pair.label);
     this.detailPairs = pairs;
   }
 
+  _resolveRawValue(row, field) {
+    if (!row || !field) return undefined;
+    return String(field).split('.').reduce((acc, key) => (acc ? acc[key] : undefined), row);
+  }
+
+  _hideTextValue(item) {
+    return Boolean(item?.isHtml);
+  }
+
+  _hideHtmlValue(item) {
+    return !Boolean(item?.isHtml);
+  }
+
   _resolveValue(row, field) {
-    if (!row || !field) return '—';
-    const value = String(field).split('.').reduce((acc, key) => (acc ? acc[key] : undefined), row);
+    const value = this._resolveRawValue(row, field);
     if (value === undefined || value === null || value === '') return '—';
     if (Array.isArray(value)) return value.join(', ');
     if (typeof value === 'object') return JSON.stringify(value);

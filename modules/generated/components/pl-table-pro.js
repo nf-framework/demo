@@ -11,6 +11,7 @@ import '@plcmp/pl-textarea';
 import { PlaceHolder } from '@plcmp/utils';
 
 import '/generated/components/table-pro/pl-table-settings.js';
+import '/generated/components/table-pro/pl-table-settings-button.js';
 import '/generated/components/pl-table-pro-column.js';
 
 import { applySettingsToColumns, normalizeFixed } from '/generated/components/table-pro/helpers/columns.js';
@@ -131,6 +132,8 @@ const DETAIL_DIRECTION_OPTIONS = [
   { value: 'QA', text: 'QA' }
 ];
 
+const MAX_SORT_COLUMNS = 3;
+
 class PlTablePro extends PlElement {
   static properties = {
     columns: { type: Array, value: () => [], observer: '_stateChanged' },
@@ -146,13 +149,16 @@ class PlTablePro extends PlElement {
     columnWidths: { type: Object, value: () => ({}), observer: '_stateChanged' },
     settings: { type: Object, value: null, observer: '_stateChanged' },
     settingsKey: { type: String, observer: '_stateChanged' },
-    enableSettings: { type: Boolean, value: true, observer: '_settingsUiChanged' },
+    enableSettings: { type: Boolean, value: true, observer: '_enableSettingsChanged' },
     masterDetail: { type: Boolean, value: false, observer: '_stateChanged' },
     inlineEdit: { type: Boolean, value: false, observer: '_stateChanged' },
     rowKeyField: { type: String, value: 'id' },
     detailFields: { type: Array, value: () => [] },
     groupRowTemplate: { type: Object, value: null },
     detailVariant: { type: String, value: '' },
+    _hasTopToolbar: { type: Boolean, value: false },
+    _hasCustomSettingsButton: { type: Boolean, value: false },
+    _hasSettingsButton: { type: Boolean, value: false },
     _settingsOpen: { type: Boolean, value: false, observer: '_settingsUiChanged' },
     _expandedKey: { type: String, value: '', observer: '_stateChanged' },
     _editingCell: { type: Object, value: null, observer: '_stateChanged' }
@@ -187,25 +193,34 @@ class PlTablePro extends PlElement {
       min-height: var(--pl-base-size);
       border-bottom: 1px solid var(--pl-grey-light);
       background: var(--pl-background-color);
+      position: relative;
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 6px 8px;
+      padding: 6px 44px 6px 8px;
       box-sizing: border-box;
+    }
+
+    .toolbar[hidden] {
+      display: none;
     }
 
     .toolbar slot[name="top-toolbar"]::slotted(*) {
       width: 100%;
     }
 
-    .toolbar-spacer {
-      margin-inline-start: auto;
+    .toolbar-settings-trigger {
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      z-index: 2;
     }
 
     .table-host {
       flex: 1;
       min-height: 0;
       min-width: 0;
+      position: relative;
       overflow: auto;
       background: var(--pl-background-color);
     }
@@ -214,6 +229,21 @@ class PlTablePro extends PlElement {
       min-width: max-content;
       min-height: 100%;
       display: block;
+    }
+
+    .resize-guide {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: var(--pl-primary-base);
+      opacity: .9;
+      pointer-events: none;
+      z-index: 28;
+    }
+
+    .resize-guide[hidden] {
+      display: none;
     }
 
     table {
@@ -225,13 +255,14 @@ class PlTablePro extends PlElement {
     }
 
     thead {
-      position: sticky;
-      top: 0;
-      z-index: 5;
+      position: relative;
+      z-index: 20;
     }
 
     thead th {
-      position: relative;
+      position: sticky;
+      top: 0;
+      z-index: 20;
       background: var(--pl-grey-lightest);
       border-bottom: 1px solid var(--pl-grey-light);
       border-right: 1px solid var(--pl-grey-light);
@@ -261,10 +292,14 @@ class PlTablePro extends PlElement {
 
     .sort-btn {
       flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
       border: 0;
-      padding: 0;
+      padding: 0 2px;
       margin: 0;
-      width: 18px;
+      min-width: 18px;
       height: 18px;
       border-radius: 4px;
       font: var(--pl-header-font);
@@ -277,6 +312,33 @@ class PlTablePro extends PlElement {
     .sort-btn:hover {
       background: transparent;
       color: var(--pl-text-color);
+    }
+
+    .sort-btn.is-active {
+      color: var(--pl-primary-base);
+    }
+
+    .sort-icon {
+      font-size: 12px;
+      line-height: 1;
+    }
+
+    .sort-order {
+      min-width: 11px;
+      height: 11px;
+      padding: 0 2px;
+      border-radius: 999px;
+      background: var(--pl-primary-base);
+      color: var(--pl-background-color);
+      font-size: 9px;
+      line-height: 11px;
+      font-weight: 700;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    thead th.sorted-column {
+      box-shadow: inset 0 -2px 0 var(--pl-primary-base);
     }
 
     .header-resizer {
@@ -371,7 +433,7 @@ class PlTablePro extends PlElement {
     }
 
     thead th.fixed-cell {
-      z-index: 12;
+      z-index: 24;
     }
 
     tbody td.fixed-cell {
@@ -383,7 +445,7 @@ class PlTablePro extends PlElement {
     }
 
     thead th.action-cell {
-      z-index: 14;
+      z-index: 26;
     }
 
     tbody td.action-cell {
@@ -473,9 +535,15 @@ class PlTablePro extends PlElement {
       flex: 0 0 20px;
       width: 20px;
       min-width: 20px;
+      height: 20px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+    }
+
+    .tree-toggle {
+      --pl-base-size: 20px;
+      --pl-content-width: 20px;
     }
 
     .tree-value {
@@ -999,18 +1067,20 @@ class PlTablePro extends PlElement {
 
   static template = html`
     <div class="shell">
-      <div class="toolbar">
-        <slot name="top-toolbar"></slot>
-        <div class="toolbar-spacer"></div>
+      <div class="toolbar" hidden$="[[!_hasTopToolbar]]">
+        <slot id="topToolbarSlot" name="top-toolbar"></slot>
         <pl-icon-button
-          id="btnSettings"
-          variant="secondary"
+          class="toolbar-settings-trigger"
+          variant="ghost"
           iconset="pl-default"
           icon="settings-2"
-          title="Настройки колонок"></pl-icon-button>
+          title="Настройки колонок"
+          data-action="toggle-settings"
+          hidden$="[[_hideBuiltinSettingsButton(enableSettings)]]"></pl-icon-button>
       </div>
       <div id="tableHost" class="table-host">
         <div id="legacyHost" class="legacy-host"></div>
+        <div id="resizeGuide" class="resize-guide" hidden></div>
       </div>
     </div>
 
@@ -1049,13 +1119,16 @@ class PlTablePro extends PlElement {
     this._pendingGroupRowOffset = 0;
     this._runtimeVersion = 0;
     this._headerRuntimeRaf = 0;
+    this._resizePreviewRaf = 0;
 
     this._bound = {
       onClick: this._onClick.bind(this),
       onDblClick: this._onDblClick.bind(this),
       onKeyDown: this._onKeyDown.bind(this),
+      onSettingsToggle: this._onSettingsToggle.bind(this),
       onSettingsChange: this._onSettingsChange.bind(this),
       onSettingsClose: this._onSettingsClose.bind(this),
+      onTopToolbarSlotChange: this._syncToolbarVisibility.bind(this),
       onTableMouseOver: this._onTableMouseOver.bind(this),
       onTableMouseLeave: this._onTableMouseLeave.bind(this),
       onTableScroll: this._onTableScroll.bind(this),
@@ -1073,8 +1146,10 @@ class PlTablePro extends PlElement {
 
     this.addEventListener('click', this._bound.onClick);
     this.addEventListener('dblclick', this._bound.onDblClick);
+    this.addEventListener('pl-table-pro-settings-toggle', this._bound.onSettingsToggle);
     this.$.settingsPanel?.addEventListener('table-settings-change', this._bound.onSettingsChange);
     this.$.settingsPanel?.addEventListener('table-settings-close', this._bound.onSettingsClose);
+    this.$.topToolbarSlot?.addEventListener('slotchange', this._bound.onTopToolbarSlotChange);
     this.$.tableHost?.addEventListener('mouseover', this._bound.onTableMouseOver);
     this.$.tableHost?.addEventListener('mouseleave', this._bound.onTableMouseLeave);
     this.$.tableHost?.addEventListener('keydown', this._bound.onKeyDown);
@@ -1087,6 +1162,7 @@ class PlTablePro extends PlElement {
     }
     this._syncGroupRowOffset(true);
 
+    this._syncToolbarVisibility();
     this._settingsUiChanged();
     this._scheduleStateSync();
   }
@@ -1099,8 +1175,10 @@ class PlTablePro extends PlElement {
 
     this.removeEventListener('click', this._bound.onClick);
     this.removeEventListener('dblclick', this._bound.onDblClick);
+    this.removeEventListener('pl-table-pro-settings-toggle', this._bound.onSettingsToggle);
     this.$.settingsPanel?.removeEventListener('table-settings-change', this._bound.onSettingsChange);
     this.$.settingsPanel?.removeEventListener('table-settings-close', this._bound.onSettingsClose);
+    this.$.topToolbarSlot?.removeEventListener('slotchange', this._bound.onTopToolbarSlotChange);
     this.$.tableHost?.removeEventListener('mouseover', this._bound.onTableMouseOver);
     this.$.tableHost?.removeEventListener('mouseleave', this._bound.onTableMouseLeave);
     this.$.tableHost?.removeEventListener('keydown', this._bound.onKeyDown);
@@ -1124,6 +1202,11 @@ class PlTablePro extends PlElement {
       cancelAnimationFrame(this._stateSyncRaf);
       this._stateSyncRaf = 0;
     }
+    if (this._resizePreviewRaf) {
+      cancelAnimationFrame(this._resizePreviewRaf);
+      this._resizePreviewRaf = 0;
+    }
+    this._hideResizeGuide();
     window.removeEventListener('mousemove', this._bound.onResizeMove);
     window.removeEventListener('mouseup', this._bound.onResizeEnd);
     this._stateSyncScheduled = false;
@@ -1156,10 +1239,60 @@ class PlTablePro extends PlElement {
     this._syncSelectionControls();
   }
 
+  _enableSettingsChanged() {
+    this._syncToolbarVisibility();
+    this._settingsUiChanged();
+  }
+
   _settingsUiChanged() {
-    if (!this.$?.btnSettings || !this.$?.settingsLayer) return;
-    this.$.btnSettings.hidden = !this.enableSettings;
-    this.$.settingsLayer.hidden = !this._settingsOpen;
+    if (!this.$?.settingsLayer) return;
+    const canUseSettings = this.enableSettings && this._hasSettingsButton;
+    const visible = canUseSettings && this._settingsOpen;
+    this.$.settingsLayer.hidden = !visible;
+    if (!canUseSettings && this._settingsOpen) this._settingsOpen = false;
+  }
+
+  _syncToolbarVisibility() {
+    const slot = this.$?.topToolbarSlot;
+    if (!slot) {
+      this._hasTopToolbar = Boolean(this.enableSettings);
+      this._hasCustomSettingsButton = false;
+      this._hasSettingsButton = Boolean(this.enableSettings);
+      this._settingsUiChanged();
+      return;
+    }
+
+    const assigned = slot.assignedNodes({ flatten: true });
+    const elements = assigned.filter((node) => node?.nodeType === Node.ELEMENT_NODE);
+    const hasContent = assigned.some((node) => this._isVisibleToolbarNode(node));
+    this._hasCustomSettingsButton = elements.some((node) => this._hasSettingsButtonInside(node));
+    this._hasTopToolbar = hasContent || Boolean(this.enableSettings);
+    this._hasSettingsButton = Boolean(this.enableSettings || this._hasCustomSettingsButton);
+    this._settingsUiChanged();
+  }
+
+  _isVisibleToolbarNode(node) {
+    if (!node) return false;
+    if (node.nodeType === Node.TEXT_NODE) return String(node.textContent || '').trim().length > 0;
+    if (node.nodeType !== Node.ELEMENT_NODE) return false;
+    if (node.hidden || node.getAttribute?.('hidden') !== null) return false;
+    return true;
+  }
+
+  _hasSettingsButtonInside(node) {
+    if (!node || node.nodeType !== Node.ELEMENT_NODE) return false;
+    if (node.localName === 'pl-table-pro-settings-button') return true;
+    return Boolean(node.querySelector?.('pl-table-pro-settings-button'));
+  }
+
+  _hideBuiltinSettingsButton(enableSettings) {
+    return !Boolean(enableSettings);
+  }
+
+  _onSettingsToggle(event) {
+    if (!this.enableSettings || !this._hasSettingsButton) return;
+    event?.stopPropagation?.();
+    this._settingsOpen = !this._settingsOpen;
   }
 
   _syncExtraStyles() {
@@ -1546,7 +1679,7 @@ class PlTablePro extends PlElement {
     if (parentKey == null || parentKey === '') return;
 
     let attempt = 0;
-    const maxAttempts = 10;
+    const maxAttempts = 12;
     const parentToken = String(parentKey);
 
     const tryLoad = () => {
@@ -1561,22 +1694,68 @@ class PlTablePro extends PlElement {
         if (attempt < maxAttempts) setTimeout(tryLoad, 16);
         return;
       }
-
-      if (this._pendingLoadPlaceholder === placeHolder) return;
-
-      this._pendingLoadPlaceholder = placeHolder;
-      Promise.resolve(source.load(placeHolder))
-        .catch(() => {
-          // Dataset will emit toast on error.
-        })
-        .finally(() => {
-          if (this._pendingLoadPlaceholder === placeHolder) {
-            this._pendingLoadPlaceholder = null;
-          }
-        });
+      this._loadByPlaceHolder(placeHolder);
     };
 
     setTimeout(tryLoad, 0);
+  }
+
+  _isTreePlaceHolderVisible(placeHolder, source) {
+    if (!this.tree) return true;
+    if (!this._isPlaceHolderRow(placeHolder)) return false;
+
+    const keyField = String(this.keyField || this.rowKeyField || 'id').trim() || 'id';
+    const pkeyField = String(this.pkeyField || 'parent_id').trim() || 'parent_id';
+    const parentToken = placeHolder?.[pkeyField];
+    if (parentToken == null || parentToken === '') return true;
+
+    const parent = (Array.isArray(source) ? source : []).find((row) => {
+      if (!row || this._isPlaceHolderRow(row)) return false;
+      const token = row?.[keyField];
+      return token != null && String(token) === String(parentToken);
+    });
+    if (!parent) return false;
+    return Boolean(parent._opened);
+  }
+
+  _visiblePlaceHolderByScroll() {
+    const host = this.$?.tableHost;
+    const source = this.data;
+    if (!host || !Array.isArray(source)) return null;
+
+    const triggerBottom = host.scrollTop + host.clientHeight + 80;
+    const rows = host.querySelectorAll('tr.placeholder-row[data-source-index]');
+    for (const rowEl of rows) {
+      const sourceIndex = Number(rowEl.dataset.sourceIndex);
+      if (!Number.isInteger(sourceIndex) || sourceIndex < 0) continue;
+      const rowTop = Number(rowEl.offsetTop || 0);
+      if (rowTop > triggerBottom) continue;
+
+      const placeHolder = source[sourceIndex];
+      if (!this._isPlaceHolderRow(placeHolder)) continue;
+      if (!this._isTreePlaceHolderVisible(placeHolder, source)) continue;
+      return placeHolder;
+    }
+
+    return null;
+  }
+
+  _loadByPlaceHolder(placeHolder) {
+    const source = this.data;
+    if (!source || typeof source.load !== 'function') return;
+    if (!this._isPlaceHolderRow(placeHolder)) return;
+    if (this._pendingLoadPlaceholder === placeHolder) return;
+
+    this._pendingLoadPlaceholder = placeHolder;
+    Promise.resolve(source.load(placeHolder))
+      .catch(() => {
+        // Dataset will emit toast on error.
+      })
+      .finally(() => {
+        if (this._pendingLoadPlaceholder === placeHolder) {
+          this._pendingLoadPlaceholder = null;
+        }
+      });
   }
 
   _syncSelectedRowHighlight() {
@@ -2036,33 +2215,10 @@ class PlTablePro extends PlElement {
     return row instanceof PlaceHolder || row?.constructor?.name === 'PlaceHolder';
   }
 
-  _nextPlaceHolder() {
-    const source = Array.isArray(this.data) ? this.data : [];
-    return source.find((row) => this._isPlaceHolderRow(row)) || null;
-  }
-
   _tryLoadMore() {
-    if (!this.$?.tableHost) return;
-    const source = this.data;
-    if (!source || typeof source.load !== 'function') return;
-
-    const nearBottom = this.$.tableHost.scrollTop + this.$.tableHost.clientHeight >= (this.$.tableHost.scrollHeight - 180);
-    if (!nearBottom) return;
-
-    const placeHolder = this._nextPlaceHolder();
-    if (!placeHolder) return;
-    if (this._pendingLoadPlaceholder === placeHolder) return;
-
-    this._pendingLoadPlaceholder = placeHolder;
-    Promise.resolve(source.load(placeHolder))
-      .catch(() => {
-        // Dataset will emit toast on error.
-      })
-      .finally(() => {
-        if (this._pendingLoadPlaceholder === placeHolder) {
-          this._pendingLoadPlaceholder = null;
-        }
-      });
+    const visiblePlaceHolder = this._visiblePlaceHolderByScroll();
+    if (!visiblePlaceHolder) return;
+    this._loadByPlaceHolder(visiblePlaceHolder);
   }
 
   _syncViewportWidthVar() {
@@ -2138,8 +2294,19 @@ class PlTablePro extends PlElement {
 
   _buildLeafLayout(leafColumns) {
     const columns = Array.isArray(leafColumns) ? leafColumns : [];
+    const widths = new Map();
+    columns.forEach((column) => widths.set(column.id, this._columnWidth(column)));
+    return this._buildLeafLayoutByWidths(columns, widths);
+  }
+
+  _buildLeafLayoutByWidths(leafColumns, widths) {
+    const columns = Array.isArray(leafColumns) ? leafColumns : [];
     const widthMap = new Map();
-    columns.forEach((column) => widthMap.set(column.id, this._columnWidth(column)));
+    columns.forEach((column) => {
+      const nextWidth = Number(widths?.get?.(column.id));
+      const width = Number.isFinite(nextWidth) && nextWidth > 0 ? nextWidth : this._columnWidth(column);
+      widthMap.set(column.id, width);
+    });
 
     const leftMap = new Map();
     const rightMap = new Map();
@@ -2215,56 +2382,133 @@ class PlTablePro extends PlElement {
     return Boolean(this.data && typeof this.data === 'object' && this.data.control);
   }
 
+  _normalizeSortDirection(value) {
+    const direction = String(value || '').toLowerCase();
+    return direction === 'asc' || direction === 'desc' ? direction : '';
+  }
+
   _sortStateFromData(leafColumns) {
     const datasetSorts = Array.isArray(this.data?.sorts) ? this.data.sorts : [];
-    if (datasetSorts.length === 0) return null;
+    if (datasetSorts.length === 0) return [];
 
-    const sourceSort = datasetSorts.find((item) => item?.field && (item?.sort === 'asc' || item?.sort === 'desc'));
-    if (!sourceSort) return null;
+    const leafByField = new Map(
+      (Array.isArray(leafColumns) ? leafColumns : [])
+        .filter((item) => item?.field)
+        .map((item) => [item.field, item])
+    );
 
-    const column = (leafColumns || []).find((item) => item.field === sourceSort.field);
-    if (!column) return null;
+    const normalized = [];
+    datasetSorts.forEach((item) => {
+      const field = String(item?.field || '');
+      const direction = this._normalizeSortDirection(item?.sort);
+      if (!field || !direction) return;
+      const column = leafByField.get(field);
+      if (!column) return;
+      if (normalized.some((entry) => entry.field === field)) return;
+      normalized.push({
+        columnId: column.id,
+        field: column.field,
+        direction
+      });
+    });
 
-    return {
-      columnId: column.id,
-      field: column.field,
-      direction: sourceSort.sort
-    };
+    return normalized.slice(0, MAX_SORT_COLUMNS);
+  }
+
+  _sortStateFromLocalState(leafColumns) {
+    const source = Array.isArray(this.sortState)
+      ? this.sortState
+      : (this.sortState ? [this.sortState] : []);
+    if (source.length === 0) return [];
+
+    const leafById = new Map(
+      (Array.isArray(leafColumns) ? leafColumns : [])
+        .filter((item) => item?.id && item?.field)
+        .map((item) => [item.id, item])
+    );
+    const leafByField = new Map(
+      (Array.isArray(leafColumns) ? leafColumns : [])
+        .filter((item) => item?.field)
+        .map((item) => [item.field, item])
+    );
+
+    const normalized = [];
+    source.forEach((item) => {
+      const direction = this._normalizeSortDirection(item?.direction ?? item?.sort);
+      if (!direction) return;
+
+      let column = null;
+      const columnId = String(item?.columnId || '');
+      const field = String(item?.field || '');
+      if (columnId) column = leafById.get(columnId) || null;
+      if (!column && field) column = leafByField.get(field) || null;
+      if (!column?.field) return;
+      if (normalized.some((entry) => entry.field === column.field)) return;
+
+      normalized.push({
+        columnId: column.id,
+        field: column.field,
+        direction
+      });
+    });
+
+    return normalized.slice(0, MAX_SORT_COLUMNS);
+  }
+
+  _initialSortState(leafColumns) {
+    return (Array.isArray(leafColumns) ? leafColumns : [])
+      .filter((item) => item?.field && (item.sort === 'asc' || item.sort === 'desc'))
+      .slice(0, MAX_SORT_COLUMNS)
+      .map((item) => ({
+        columnId: item.id,
+        field: item.field,
+        direction: item.sort
+      }));
   }
 
   _ensureInitialSort(leafColumns) {
-    const initial = (leafColumns || []).find((item) => item.field && (item.sort === 'asc' || item.sort === 'desc'));
-    if (!initial) return;
+    const initial = this._initialSortState(leafColumns);
+    if (initial.length === 0) return;
 
     const currentSorts = Array.isArray(this.data?.sorts) ? this.data.sorts : [];
     if (this._useBackendSort()) {
       if (currentSorts.length > 0) return;
-      this.set('data.sorts', [{ field: initial.field, sort: initial.sort }]);
+      this.set('data.sorts', initial.map((item) => ({ field: item.field, sort: item.direction })));
       return;
     }
 
-    if (this.sortState?.columnId) return;
-    this.sortState = { columnId: initial.id, field: initial.field, direction: initial.sort };
+    const local = this._sortStateFromLocalState(leafColumns);
+    if (local.length > 0) return;
+    this.sortState = initial;
   }
 
   _normalizeSortState(leafColumns) {
     const fromData = this._sortStateFromData(leafColumns);
-    if (fromData) return fromData;
+    if (fromData.length > 0) return fromData;
 
-    const source = this.sortState;
-    if (source?.columnId && (source.direction === 'asc' || source.direction === 'desc')) {
-      const column = (leafColumns || []).find((item) => item.id === source.columnId && item.field);
-      if (column) return { columnId: column.id, field: column.field, direction: source.direction };
-    }
+    const fromLocal = this._sortStateFromLocalState(leafColumns);
+    if (fromLocal.length > 0) return fromLocal;
 
-    const initial = (leafColumns || []).find((item) => item.field && (item.sort === 'asc' || item.sort === 'desc'));
-    if (initial) return { columnId: initial.id, field: initial.field, direction: initial.sort };
-    return null;
+    return this._initialSortState(leafColumns);
+  }
+
+  _sortEntryForColumn(columnId, sortState) {
+    if (!columnId || !Array.isArray(sortState)) return null;
+    const index = sortState.findIndex((item) => item?.columnId === columnId);
+    if (index < 0) return null;
+    const entry = sortState[index];
+    return {
+      direction: entry?.direction || '',
+      order: index + 1
+    };
   }
 
   _sortDirectionForColumn(columnId, sortState) {
-    if (!columnId || !sortState) return '';
-    return sortState.columnId === columnId ? sortState.direction : '';
+    return this._sortEntryForColumn(columnId, sortState)?.direction || '';
+  }
+
+  _sortOrderForColumn(columnId, sortState) {
+    return this._sortEntryForColumn(columnId, sortState)?.order || 0;
   }
 
   _nextSortDirection(current) {
@@ -2279,47 +2523,60 @@ class PlTablePro extends PlElement {
     const leaf = (applied.leafColumns || []).find((column) => column.id === columnId);
     if (!leaf?.field || !leaf.sortable) return;
 
+    const sorts = [...this._normalizeSortState(applied.leafColumns)];
+    const index = sorts.findIndex((item) => item?.field === leaf.field || item?.columnId === leaf.id);
+    const current = index >= 0 ? String(sorts[index]?.direction || '') : '';
+    const next = this._nextSortDirection(current);
+
+    if (index >= 0) sorts.splice(index, 1);
+    if (next) {
+      sorts.unshift({ columnId: leaf.id, field: leaf.field, direction: next });
+    }
+
+    const limitedSorts = sorts.slice(0, MAX_SORT_COLUMNS);
     if (this._useBackendSort()) {
-      const sorts = [...(Array.isArray(this.data?.sorts) ? this.data.sorts : [])];
-      const index = sorts.findIndex((item) => item?.field === leaf.field);
-      const current = index >= 0 ? String(sorts[index]?.sort || '') : '';
-      const next = this._nextSortDirection(current);
-
-      if (index >= 0) sorts.splice(index, 1);
-      if (next) sorts.unshift({ field: leaf.field, sort: next });
-
-      this.set('data.sorts', sorts);
+      this.set('data.sorts', limitedSorts.map((item) => ({ field: item.field, sort: item.direction })));
       return;
     }
 
-    const current = this._sortDirectionForColumn(columnId, this._normalizeSortState(applied.leafColumns));
-    const next = this._nextSortDirection(current);
-    this.sortState = next ? { columnId: leaf.id, field: leaf.field, direction: next } : null;
+    this.sortState = limitedSorts.length > 0 ? limitedSorts : null;
   }
 
   _sortEntries(entries, sortState) {
     const source = Array.isArray(entries) ? entries : [];
-    if (!sortState?.field || !sortState?.direction) return source;
-
-    const direction = sortState.direction === 'desc' ? -1 : 1;
-    const field = sortState.field;
+    const sorts = Array.isArray(sortState) ? sortState : [];
+    if (sorts.length === 0) return source;
 
     return [...source].sort((a, b) => {
-      const av = a?.row?.[field];
-      const bv = b?.row?.[field];
+      for (const sort of sorts) {
+        const field = sort?.field;
+        const direction = sort?.direction === 'desc' ? -1 : 1;
+        if (!field || !direction) continue;
 
-      if (av == null && bv == null) return (a?.sourceIndex ?? 0) - (b?.sourceIndex ?? 0);
-      if (av == null) return -1 * direction;
-      if (bv == null) return 1 * direction;
+        const av = a?.row?.[field];
+        const bv = b?.row?.[field];
 
-      const ad = av instanceof Date ? av.getTime() : NaN;
-      const bd = bv instanceof Date ? bv.getTime() : NaN;
-      if (Number.isFinite(ad) && Number.isFinite(bd)) return (ad - bd) * direction;
+        if (av == null && bv == null) continue;
+        if (av == null) return -1 * direction;
+        if (bv == null) return 1 * direction;
 
-      if (typeof av === 'number' && typeof bv === 'number') return (av - bv) * direction;
+        const ad = av instanceof Date ? av.getTime() : NaN;
+        const bd = bv instanceof Date ? bv.getTime() : NaN;
+        if (Number.isFinite(ad) && Number.isFinite(bd)) {
+          const diff = ad - bd;
+          if (diff !== 0) return diff * direction;
+          continue;
+        }
 
-      const cmp = String(av).localeCompare(String(bv), 'ru', { sensitivity: 'base', numeric: true });
-      if (cmp !== 0) return cmp * direction;
+        if (typeof av === 'number' && typeof bv === 'number') {
+          const diff = av - bv;
+          if (diff !== 0) return diff * direction;
+          continue;
+        }
+
+        const cmp = String(av).localeCompare(String(bv), 'ru', { sensitivity: 'base', numeric: true });
+        if (cmp !== 0) return cmp * direction;
+      }
       return (a?.sourceIndex ?? 0) - (b?.sourceIndex ?? 0);
     });
   }
@@ -2419,6 +2676,49 @@ class PlTablePro extends PlElement {
     return ` style="${styleParts.join(';')};"`;
   }
 
+  _buildTreeRowsModelWithPlaceholders(sourceEntries, options = {}) {
+    const source = Array.isArray(sourceEntries) ? sourceEntries : [];
+    const keyField = String(options.keyField || this.keyField || this.rowKeyField || 'id').trim() || 'id';
+    const pkeyField = String(options.pkeyField || this.pkeyField || 'parent_id').trim() || 'parent_id';
+    const hasChildField = String(options.hasChildField || this.hasChildField || '_haschildren').trim() || '_haschildren';
+
+    return source.map((entry, index) => {
+      const sourceIndex = Number(entry?.sourceIndex);
+      const normalizedSourceIndex = Number.isInteger(sourceIndex) ? sourceIndex : index;
+      const row = entry?.row;
+
+      if (this._isPlaceHolderRow(row)) {
+        return {
+          kind: 'placeholder',
+          row,
+          sourceIndex: normalizedSourceIndex
+        };
+      }
+
+      const keyRaw = row?.[keyField];
+      const parentRaw = row?.[pkeyField];
+      const key = keyRaw == null || keyRaw === '' ? `__row_${normalizedSourceIndex}` : String(keyRaw);
+      const parentKey = parentRaw == null || parentRaw === '' ? '' : String(parentRaw);
+      const levelRaw = row?._level ?? row?.level;
+      const level = Number.isFinite(Number(levelRaw)) ? Number(levelRaw) : 0;
+      const hasChildren = Boolean(row?.[hasChildField]);
+      const opened = Object.prototype.hasOwnProperty.call(row || {}, '_opened')
+        ? Boolean(row?._opened)
+        : false;
+
+      return {
+        kind: 'data',
+        row,
+        sourceIndex: normalizedSourceIndex,
+        treeLevel: level,
+        treeHasChildren: hasChildren,
+        treeOpened: opened,
+        treeKey: key,
+        treeParentKey: parentKey
+      };
+    });
+  }
+
   _renderTable() {
     if (!this.$?.tableHost) return;
     this._syncColumnsSource();
@@ -2442,6 +2742,7 @@ class PlTablePro extends PlElement {
     const sourceEntries = sourceRows.map((row, sourceIndex) => ({ row, sourceIndex }));
     const placeHolderEntries = sourceEntries.filter((entry) => this._isPlaceHolderRow(entry.row));
     const materializedEntries = sourceEntries.filter((entry) => !this._isPlaceHolderRow(entry.row));
+    const treeHasInlinePlaceholders = this.tree && placeHolderEntries.length > 0;
     const layout = this._buildLeafLayout(leafColumns);
     const groupLayout = this._buildGroupLayout(topColumns, layout);
     this._ensureInitialSort(leafColumns);
@@ -2458,11 +2759,17 @@ class PlTablePro extends PlElement {
       .filter(Boolean);
 
     const rowsModel = this.tree
-      ? buildTreeRowsModel(sortedEntries, {
-        keyField: this.keyField || this.rowKeyField || 'id',
-        pkeyField: this.pkeyField || 'parent_id',
-        hasChildField: this.hasChildField || '_haschildren'
-      })
+      ? (treeHasInlinePlaceholders
+        ? this._buildTreeRowsModelWithPlaceholders(sourceEntries, {
+          keyField: this.keyField || this.rowKeyField || 'id',
+          pkeyField: this.pkeyField || 'parent_id',
+          hasChildField: this.hasChildField || '_haschildren'
+        })
+        : buildTreeRowsModel(sortedEntries, {
+          keyField: this.keyField || this.rowKeyField || 'id',
+          pkeyField: this.pkeyField || 'parent_id',
+          hasChildField: this.hasChildField || '_haschildren'
+        }))
       : buildRowsModel(
         sortedEntries,
         groupByFields
@@ -2505,17 +2812,19 @@ class PlTablePro extends PlElement {
         const groupInfo = isGroup ? groupLayout.get(column.id) : null;
         const styleAttr = this._headerCellStyle(column, layout, isGroup, groupInfo);
         const fixedSide = isGroup ? String(groupInfo?.side || '') : this._columnFixedSide(column);
+        const sortDir = this._sortDirectionForColumn(column.id, sortState);
+        const sortOrder = this._sortOrderForColumn(column.id, sortState);
+        const canSort = !isGroup && Boolean(column.sortable && column.field);
         const classParts = [];
         if (isGroup) classParts.push('group');
         if (fixedSide) classParts.push('fixed-cell', `fixed-${fixedSide}`);
         if (column.action) classParts.push('action-cell');
+        if (sortDir) classParts.push('sorted-column', `sorted-${sortDir}`);
         const className = classParts.length > 0 ? ` class="${classParts.join(' ')}"` : '';
         const rowSpanAttr = rowSpan > 1 ? ` rowspan="${rowSpan}"` : '';
         const colSpanAttr = colSpan > 1 ? ` colspan="${colSpan}"` : '';
         const headerTpl = this._headerTemplateForColumn(column);
         const headerNode = this._headerNodeForColumn(column);
-        const sortDir = this._sortDirectionForColumn(column.id, sortState);
-        const canSort = !isGroup && Boolean(column.sortable && column.field);
 
         let headerContent = escapeHtml(column.header || column.field || column.id);
         if (headerTpl) {
@@ -2532,10 +2841,10 @@ class PlTablePro extends PlElement {
           ? `
             <button
               type="button"
-              class="sort-btn"
+              class="sort-btn${sortDir ? ' is-active' : ''}"
               data-action="sort-column"
               data-column-id="${escapeHtml(column.id)}"
-              title="Сортировка">${sortDir === 'asc' ? '↑' : (sortDir === 'desc' ? '↓' : '↕')}</button>
+              title="${escapeHtml(sortDir ? `Сортировка ${sortOrder || 1}: ${sortDir === 'asc' ? 'по возрастанию' : 'по убыванию'}` : 'Сортировка')}"><span class="sort-icon">${sortDir === 'asc' ? '↑' : (sortDir === 'desc' ? '↓' : '↕')}</span>${sortOrder ? `<span class="sort-order">${sortOrder}</span>` : ''}</button>
           `
           : '';
         const resizer = (!isGroup && column.resizable)
@@ -2543,7 +2852,10 @@ class PlTablePro extends PlElement {
           : '';
         headerContent = `<div class="th-inner"><div class="th-label">${headerContent}</div>${sortButton}</div>${resizer}`;
 
-        return `<th${className}${rowSpanAttr}${colSpanAttr}${styleAttr}>${headerContent}</th>`;
+        const colDataAttr = isGroup
+          ? ` data-group-column-id="${escapeHtml(column.id)}"`
+          : ` data-column-id="${escapeHtml(column.id)}"`;
+        return `<th${className}${rowSpanAttr}${colSpanAttr}${colDataAttr}${styleAttr}>${headerContent}</th>`;
       }).join('');
 
       return `<tr>${rowIndex === 0 ? `${thSelect}${thExpand}` : ''}${cells}</tr>`;
@@ -2564,7 +2876,7 @@ class PlTablePro extends PlElement {
           filterTemplateBindings.push({ slotKey, tpl: filterTpl, column });
           filterContent = `<div class="filter-cell-content" data-filter-template-slot="${escapeHtml(slotKey)}"></div>`;
         }
-        return `<th${className}${styleAttr}>${filterContent}</th>`;
+        return `<th${className} data-column-id="${escapeHtml(column.id)}"${styleAttr}>${filterContent}</th>`;
       }).join('')}</tr>`
       : '';
     const headerHtml = `${headerRowsHtml}${filterRowHtml}`;
@@ -2572,6 +2884,15 @@ class PlTablePro extends PlElement {
     let dataRowOrder = 0;
     const cellTemplateBindings = [];
     const bodyRows = rowsModel.map((entry, rowModelIndex) => {
+      if (entry.kind === 'placeholder') {
+        const colSpan = leafColumns.length + (this.masterDetail ? 1 : 0) + (this.multiSelect ? 1 : 0);
+        return `
+          <tr class="placeholder-row" data-source-index="${entry.sourceIndex}">
+            <td colspan="${colSpan}">Загрузка данных...</td>
+          </tr>
+        `;
+      }
+
       if (entry.kind === 'group') {
         const colSpan = leafColumns.length + (this.masterDetail ? 1 : 0) + (this.multiSelect ? 1 : 0);
         return this._renderGroupRow(entry, colSpan);
@@ -2629,9 +2950,11 @@ class PlTablePro extends PlElement {
         const editableClass = isEditable ? ' editable-cell' : '';
         const editingClass = isEditing ? ' inline-editing' : '';
         const width = this._bodyCellStyle(column, layout);
-        const dataAttrs = column.field
-          ? ` data-field="${escapeHtml(column.field)}" data-column-id="${escapeHtml(column.id)}" data-source-index="${entry.sourceIndex}" data-editable="${isEditable ? 'true' : 'false'}"`
+        const baseDataAttrs = ` data-column-id="${escapeHtml(column.id)}" data-source-index="${entry.sourceIndex}"`;
+        const fieldAttrs = column.field
+          ? ` data-field="${escapeHtml(column.field)}" data-editable="${isEditable ? 'true' : 'false'}"`
           : '';
+        const dataAttrs = `${baseDataAttrs}${fieldAttrs}`;
         let content = isEditing
           ? this._renderInlineEditorCell(column, row, entry.sourceIndex)
           : this._renderCellContent(column, row, {
@@ -2666,7 +2989,13 @@ class PlTablePro extends PlElement {
       return dataRow + detailRow;
     });
 
-    const placeHolderRows = placeHolderEntries.map((entry) => {
+    const visiblePlaceHolderEntries = treeHasInlinePlaceholders
+      ? []
+      : placeHolderEntries.filter((entry) => {
+        return this._isTreePlaceHolderVisible(entry.row, sourceRows);
+      });
+
+    const placeHolderRows = visiblePlaceHolderEntries.map((entry) => {
       const colSpan = leafColumns.length + (this.masterDetail ? 1 : 0) + (this.multiSelect ? 1 : 0);
       return `
         <tr class="placeholder-row" data-source-index="${entry.sourceIndex}">
@@ -2701,7 +3030,7 @@ class PlTablePro extends PlElement {
       const actionClass = column.action ? ' action-cell' : '';
       const alignClass = this._columnAlignClass(column);
       const style = this._footerCellStyle(column, layout);
-      return `<td class="${alignClass}${fixedClass}${actionClass}"${style}>${footerContent}</td>`;
+      return `<td data-column-id="${escapeHtml(column.id)}" class="${alignClass}${fixedClass}${actionClass}"${style}>${footerContent}</td>`;
     });
 
     const hasFooter = footerTemplateBindings.length > 0
@@ -2942,6 +3271,7 @@ class PlTablePro extends PlElement {
         <pl-icon-button
           class="tree-toggle"
           variant="link"
+          size="16"
           iconset="pl-default"
           icon="${icon}"
           data-action="tree-toggle"
@@ -3201,17 +3531,15 @@ class PlTablePro extends PlElement {
   }
 
   _onClick(event) {
-    const settingsBtn = this._pathTarget(event, (node) => node.id === 'btnSettings');
-    if (settingsBtn && this.enableSettings) {
-      this._settingsOpen = !this._settingsOpen;
-      return;
-    }
-
     const actionEl = this._pathTarget(event, (node) => Boolean(node.dataset?.action));
     if (actionEl) {
       const action = actionEl.dataset.action;
       if (action === 'close-settings') {
         this._settingsOpen = false;
+        return;
+      }
+      if (action === 'toggle-settings') {
+        this._onSettingsToggle(event);
         return;
       }
       if (action === 'save-inline') {
@@ -3390,6 +3718,108 @@ class PlTablePro extends PlElement {
     this._tryLoadMore();
   }
 
+  _collectResizeDomMaps() {
+    const host = this.$?.tableHost;
+    const leafMap = new Map();
+    const groupMap = new Map();
+    if (!host) return { leafMap, groupMap };
+
+    host.querySelectorAll('th[data-column-id], td[data-column-id]').forEach((node) => {
+      const id = String(node.getAttribute('data-column-id') || '').trim();
+      if (!id) return;
+      if (!leafMap.has(id)) leafMap.set(id, []);
+      leafMap.get(id).push(node);
+    });
+
+    host.querySelectorAll('th[data-group-column-id]').forEach((node) => {
+      const id = String(node.getAttribute('data-group-column-id') || '').trim();
+      if (!id) return;
+      if (!groupMap.has(id)) groupMap.set(id, []);
+      groupMap.get(id).push(node);
+    });
+
+    return { leafMap, groupMap };
+  }
+
+  _setColumnElementsWidth(elements, width) {
+    const next = `${Math.max(1, Math.round(Number(width) || 0))}px`;
+    (Array.isArray(elements) ? elements : []).forEach((el) => {
+      if (!(el instanceof HTMLElement)) return;
+      el.style.minWidth = next;
+      el.style.maxWidth = next;
+      el.style.width = next;
+    });
+  }
+
+  _setColumnElementsStickyOffset(elements, side, value) {
+    const isLeft = side === 'left';
+    const isRight = side === 'right';
+    const next = `${Math.max(0, Math.round(Number(value) || 0))}px`;
+    (Array.isArray(elements) ? elements : []).forEach((el) => {
+      if (!(el instanceof HTMLElement)) return;
+      if (isLeft) {
+        el.style.left = next;
+        el.style.right = '';
+        return;
+      }
+      if (isRight) {
+        el.style.right = next;
+        el.style.left = '';
+        return;
+      }
+      el.style.left = '';
+      el.style.right = '';
+    });
+  }
+
+  _applyResizePreview() {
+    const state = this._resizeState;
+    if (!state) return;
+
+    const previewWidth = Math.max(56, Math.round(Number(state.nextWidth || state.startWidth)));
+    const widths = new Map(state.baseWidths || []);
+    widths.set(state.columnId, previewWidth);
+
+    const leafLayout = this._buildLeafLayoutByWidths(state.leafColumns, widths);
+    const groupLayout = this._buildGroupLayout(state.topColumns, leafLayout);
+
+    const affectedLeafIds = new Set([state.columnId]);
+    if (state.targetSide === 'left') {
+      const leftColumns = state.leafColumns.filter((column) => this._columnFixedSide(column) === 'left');
+      const targetIndex = leftColumns.findIndex((column) => column.id === state.columnId);
+      if (targetIndex >= 0) {
+        leftColumns.slice(targetIndex + 1).forEach((column) => affectedLeafIds.add(column.id));
+      }
+    } else if (state.targetSide === 'right') {
+      const rightColumns = state.leafColumns.filter((column) => this._columnFixedSide(column) === 'right');
+      const targetIndex = rightColumns.findIndex((column) => column.id === state.columnId);
+      if (targetIndex > 0) {
+        rightColumns.slice(0, targetIndex).forEach((column) => affectedLeafIds.add(column.id));
+      }
+    }
+
+    affectedLeafIds.forEach((columnId) => {
+      const column = state.leafById.get(columnId);
+      if (!column) return;
+      const elements = state.leafDomMap.get(columnId);
+      if (!elements?.length) return;
+      this._setColumnElementsWidth(elements, leafLayout.widthMap.get(columnId) || this._columnWidth(column));
+      const side = this._columnFixedSide(column);
+      if (side === 'left') {
+        this._setColumnElementsStickyOffset(elements, 'left', leafLayout.leftMap.get(columnId) || 0);
+      } else if (side === 'right') {
+        this._setColumnElementsStickyOffset(elements, 'right', leafLayout.rightMap.get(columnId) || 0);
+      }
+    });
+
+    state.groupDomMap.forEach((elements, groupId) => {
+      const info = groupLayout.get(groupId);
+      if (!info) return;
+      this._setColumnElementsWidth(elements, info.width || 1);
+      this._setColumnElementsStickyOffset(elements, info.side, info.side === 'left' ? info.left : info.right);
+    });
+  }
+
   _onMouseDown(event) {
     const handle = this._pathTarget(event, (node) => node.dataset?.action === 'resize-column');
     if (!handle) return;
@@ -3398,17 +3828,42 @@ class PlTablePro extends PlElement {
     if (!columnId) return;
 
     const applied = applySettingsToColumns(this._activeColumns || [], this.settings);
-    const column = (applied.leafColumns || []).find((item) => item.id === columnId);
+    const topColumns = Array.isArray(applied.columns) ? applied.columns : [];
+    const leafColumns = Array.isArray(applied.leafColumns) ? applied.leafColumns : [];
+    const column = leafColumns.find((item) => item.id === columnId);
     if (!column?.resizable) return;
 
     event.preventDefault();
     event.stopPropagation();
 
+    const host = this.$?.tableHost;
+    const hostRect = host?.getBoundingClientRect?.();
+    const handleRect = handle.getBoundingClientRect();
+    const scrollLeft = Number(host?.scrollLeft || 0);
+    const startGuideLeft = Number.isFinite(hostRect?.left)
+      ? Math.round((handleRect.right - hostRect.left) + scrollLeft)
+      : 0;
+    const { leafMap: leafDomMap, groupMap: groupDomMap } = this._collectResizeDomMaps();
+    const leafById = new Map(leafColumns.map((item) => [item.id, item]));
+    const baseWidths = new Map();
+    leafColumns.forEach((item) => baseWidths.set(item.id, this._columnWidth(item)));
+
     this._resizeState = {
       columnId,
       startX: event.clientX,
-      startWidth: this._columnWidth(column)
+      startWidth: this._columnWidth(column),
+      nextWidth: this._columnWidth(column),
+      startGuideLeft,
+      targetSide: this._columnFixedSide(column),
+      topColumns,
+      leafColumns,
+      leafById,
+      leafDomMap,
+      groupDomMap,
+      baseWidths
     };
+    this._showResizeGuide();
+    this._scheduleResizeGuideUpdate();
 
     window.addEventListener('mousemove', this._bound.onResizeMove);
     window.addEventListener('mouseup', this._bound.onResizeEnd);
@@ -3418,17 +3873,68 @@ class PlTablePro extends PlElement {
     if (!this._resizeState) return;
     const delta = Number(event.clientX) - Number(this._resizeState.startX);
     const nextWidth = Math.max(56, Math.round(Number(this._resizeState.startWidth) + delta));
-    this.columnWidths = {
-      ...(this.columnWidths || {}),
-      [this._resizeState.columnId]: nextWidth
-    };
+    if (nextWidth === this._resizeState.nextWidth) return;
+    this._resizeState.nextWidth = nextWidth;
+    this._scheduleResizeGuideUpdate();
   }
 
   _onResizeEnd() {
-    if (!this._resizeState) return;
+    if (!this._resizeState) {
+      this._hideResizeGuide();
+      return;
+    }
+    const state = this._resizeState;
+    const finalWidth = Math.max(56, Math.round(Number(state.nextWidth ?? state.startWidth)));
+    const currentWidth = Number(this.columnWidths?.[state.columnId]);
+    const shouldSkipUpdate = (
+      (Number.isFinite(currentWidth) && currentWidth === finalWidth)
+      || (!Number.isFinite(currentWidth) && finalWidth === Number(state.startWidth))
+    );
+    if (!shouldSkipUpdate) {
+      this.columnWidths = {
+        ...(this.columnWidths || {}),
+        [state.columnId]: finalWidth
+      };
+    }
     this._resizeState = null;
+    this._hideResizeGuide();
     window.removeEventListener('mousemove', this._bound.onResizeMove);
     window.removeEventListener('mouseup', this._bound.onResizeEnd);
+  }
+
+  _showResizeGuide() {
+    const guide = this.$?.resizeGuide;
+    if (!guide) return;
+    guide.hidden = false;
+  }
+
+  _hideResizeGuide() {
+    if (this._resizePreviewRaf) {
+      cancelAnimationFrame(this._resizePreviewRaf);
+      this._resizePreviewRaf = 0;
+    }
+    const guide = this.$?.resizeGuide;
+    if (!guide) return;
+    guide.hidden = true;
+    guide.style.left = '';
+  }
+
+  _scheduleResizeGuideUpdate() {
+    if (this._resizePreviewRaf) return;
+    this._resizePreviewRaf = requestAnimationFrame(() => {
+      this._resizePreviewRaf = 0;
+      this._syncResizeGuide();
+      this._applyResizePreview();
+    });
+  }
+
+  _syncResizeGuide() {
+    const state = this._resizeState;
+    const guide = this.$?.resizeGuide;
+    if (!state || !guide || guide.hidden) return;
+    const delta = Number(state.nextWidth || 0) - Number(state.startWidth || 0);
+    const nextLeft = Math.max(0, Math.round(Number(state.startGuideLeft || 0) + delta));
+    guide.style.left = `${nextLeft}px`;
   }
 }
 
